@@ -1,0 +1,234 @@
+:root {
+  --color-primary: #0c519b;
+}
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  scroll-behavior: smooth;
+  color: #333;
+}
+
+.hero-background {
+  background: url('../img/IMG_6641.jpg') no-repeat center center / cover;
+  min-height: 100vh;
+  position: relative;
+}
+
+.hero-overlay {
+  background-color: rgba(0, 0, 0, 0.45);
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+}
+
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+.text-shadow {
+  text-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+/* Navbar */
+.nav-link {
+  position: relative;
+  transition: color 0.18s ease-in-out;
+  padding-bottom: 6px;
+  font-family: 'Poppins', sans-serif;
+  color: inherit;
+  display: inline-block; 
+}
+
+.nav-link,
+.dropdown-toggle {
+  background: transparent !important;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-link:focus,
+.nav-link:active,
+.nav-link:focus-visible,
+.dropdown-toggle:focus,
+.dropdown-toggle:active,
+.dropdown-toggle:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.nav-link .nav-text {
+  position: relative;
+  display: inline-block;
+}
+.nav-link .nav-text::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  transform: translateX(-50%) scaleX(0);
+  width: 100%;
+  height: 2px; 
+  background-color: #fff;
+  transform-origin: center;
+  opacity: 0;
+  border-radius: 1px;
+}
+.nav-link:hover .nav-text::after,
+.nav-link.active .nav-text::after {
+  transform: translateX(-50%) scaleX(1);
+  opacity: 1;
+}
+
+.dropdown-toggle::after {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: .4rem;
+  vertical-align: middle;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #fff;
+  transition: transform 0.25s ease;
+}
+
+.show > .dropdown-toggle::after {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  left: 50%;
+  min-width: 20px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2000;
+  padding: .35rem 0;
+}
+
+
+.dropdown.show .dropdown-menu,
+.dropdown-menu.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+/* Dropdown item */
+.dropdown-menu .dropdown-item {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #333;
+  transition: background 0.18s, color 0.18s;
+  border-radius: 6px;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background: #f8f9fa;
+  color: var(--color-primary);
+}
+
+/* Hover card animasi */
+.news-card,
+.card.shadow-sm {
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.25s ease;
+}
+.news-card:hover,
+.card.shadow-sm:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15), 0 3px 6px rgba(0,0,0,0.1);
+}
+
+/* Tombol utama */
+.btn-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.btn-primary:hover, .btn-primary:focus {
+  background-color: #0a3f78;
+  border-color: #0a3f78;
+}
+
+footer {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+footer a {
+   color: #fff;
+  }
+
+.hero-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  height: 100vh;
+  z-index: 20;
+}
+
+.hero-section .container {
+  text-align: center;
+  position: relative;
+  z-index: 15;
+}
+
+
+.hero-section .display-5 {
+  color: #fff;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+.hero-section p {
+  color: #fff;
+  opacity: 0.95;
+}
+
+.hero-section .btn-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+  padding: 0.9rem 1.8rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(12,81,155,0.15);
+  transition: all 0.25s ease;
+}
+.hero-section .btn-primary:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(12,81,155,0.3);
+}
+
+.hero-text {
+  position: absolute;
+  left: 50%;
+  top: 65%; 
+  transform: translate(-50%, -50%);
+  z-index: 15;
+}
+
+@media (max-width: 768px) {
+  .hero-text {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    margin-top: 2rem;
+  }
+  .hero-section .display-5 {
+    font-size: 2rem;
+  }
+}
