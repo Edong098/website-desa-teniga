@@ -8,10 +8,10 @@ if (isset($konek)) {
 
 $carousel_items = [];
 $three_cards = [];
-$three_more_cards = []; // Tambahan untuk 3 kartu kedua
+$three_more_cards = [];
 $all_wisata = [];
 
-$limit = 6; // Limit per halaman untuk daftar wisata bawah
+$limit = 6;
 
 if ($conn) {
     // 1. Mengambil data untuk Carousel (Wisata Unggulan - 4 data)
