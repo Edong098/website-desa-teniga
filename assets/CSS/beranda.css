@@ -2,19 +2,20 @@
   --color-primary: #0c519b;
 }
 
-html, body {
+html,
+body {
   overflow-x: hidden;
   width: 100%;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   scroll-behavior: smooth;
   color: #333;
 }
 
 .hero-background {
-  background: url('../img/IMG_6641.jpg') no-repeat center center / cover;
+  background: url("../img/IMG_6641.jpg") no-repeat center center / cover;
   min-height: 100vh;
   position: relative;
 }
@@ -27,7 +28,7 @@ body {
 }
 
 .font-poppins {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .text-shadow {
@@ -39,9 +40,9 @@ body {
   position: relative;
   transition: color 0.18s ease-in-out;
   padding-bottom: 6px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   color: inherit;
-  display: inline-block; 
+  display: inline-block;
 }
 
 .nav-link,
@@ -65,13 +66,13 @@ body {
   display: inline-block;
 }
 .nav-link .nav-text::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 50%;
   bottom: -4px;
   transform: translateX(-50%) scaleX(0);
   width: 100%;
-  height: 2px; 
+  height: 2px;
   background-color: #fff;
   transform-origin: center;
   opacity: 0;
@@ -84,11 +85,11 @@ body {
 }
 
 .dropdown-toggle::after {
-  content: '';
+  content: "";
   display: inline-block;
   width: 0;
   height: 0;
-  margin-left: .4rem;
+  margin-left: 0.4rem;
   vertical-align: middle;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
@@ -111,13 +112,12 @@ body {
   background: #fff;
   border: 1px solid #eee;
   border-radius: 10px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   opacity: 0;
   pointer-events: none;
   z-index: 2000;
-  padding: .35rem 0;
+  padding: 0.35rem 0;
 }
-
 
 .dropdown.show .dropdown-menu,
 .dropdown-menu.show {
@@ -143,12 +143,13 @@ body {
 /* Hover card animasi */
 .news-card,
 .card.shadow-sm {
-  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.25s ease;
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.25s ease;
 }
 .news-card:hover,
 .card.shadow-sm:hover {
   transform: translateY(-8px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15), 0 3px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Tombol utama */
@@ -156,7 +157,8 @@ body {
   background-color: var(--color-primary);
   border-color: var(--color-primary);
 }
-.btn-primary:hover, .btn-primary:focus {
+.btn-primary:hover,
+.btn-primary:focus {
   background-color: #0a3f78;
   border-color: #0a3f78;
 }
@@ -167,8 +169,8 @@ footer {
 }
 
 footer a {
-   color: #fff;
-  }
+  color: #fff;
+}
 
 .hero-section {
   position: relative;
@@ -185,7 +187,6 @@ footer a {
   position: relative;
   z-index: 15;
 }
-
 
 .hero-section .display-5 {
   color: #fff;
@@ -204,31 +205,173 @@ footer a {
   color: #fff;
   padding: 0.9rem 1.8rem;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(12,81,155,0.15);
+  box-shadow: 0 10px 30px rgba(12, 81, 155, 0.15);
   transition: all 0.25s ease;
 }
 .hero-section .btn-primary:hover {
   transform: translateY(-4px);
-  box-shadow: 0 15px 35px rgba(12,81,155,0.3);
+  box-shadow: 0 15px 35px rgba(12, 81, 155, 0.3);
 }
 
 .hero-text {
   position: absolute;
   left: 50%;
-  top: 65%; 
+  top: 65%;
   transform: translate(-50%, -50%);
   z-index: 15;
 }
 
-@media (max-width: 768px) {
-  .hero-text {
-    position: relative;
-    left: auto;
-    top: auto;
-    transform: none;
-    margin-top: 2rem;
+/* --- MEDIA QUERY: TABLET --- */
+/* --- MEDIA QUERY: DESKTOP --- */
+@media (min-width: 1200px) {
+  /* Hero section: agar tampilan elegan di layar besar */
+  .hero-section {
+    padding: 6rem 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
+
   .hero-section .display-5 {
-    font-size: 2rem;
+    font-size: 3.5rem;
+    line-height: 1.2;
+  }
+
+  .hero-section p {
+    font-size: 1.2rem;
+    max-width: 600px;
+  }
+
+  .hero-section .btn-primary {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+  }
+
+  /* Navbar spacing lebih longgar di layar besar */
+  .navbar {
+    padding: 1.2rem 5rem;
+  }
+
+  .nav-link {
+    font-size: 1.05rem;
+    margin: 0 0.8rem;
+  }
+
+  /* Dropdown agar pas di bawah menu utama */
+  .dropdown-menu {
+    transform: translateX(-50%) translateY(8px);
+    min-width: 180px;
+    font-size: 0.95rem;
+  }
+
+  /* Card tampilan sejajar rapi */
+  .card {
+    border-radius: var(--border-radius-card);
+    box-shadow: var(--shadow-light);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Footer tampak proporsional di layar besar */
+  footer {
+    padding: 60px 80px;
+    font-size: 1rem;
+  }
+
+  /* Container lebar maksimum */
+  .container {
+    max-width: 1300px;
+  }
+}
+
+@media (max-width: 992px) {
+  /* Navbar padding dan teks mengecil */
+  .nav-link {
+    padding: 8px 12px;
+    font-size: 0.95rem;
+  }
+
+  /* Dropdown di tablet turun sedikit lebih ke bawah */
+  .dropdown-menu {
+    transform: translateX(-50%) translateY(5px);
+    min-width: 160px;
+  }
+
+  /* Hero section text scaling */
+  .hero-section .display-5 {
+    font-size: 2.2rem;
+    line-height: 1.2;
+  }
+
+  .hero-section p {
+    font-size: 1rem;
+  }
+
+  /* Tombol hero lebih kecil */
+  .hero-section .btn-primary {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 0.9rem;
+  }
+}
+
+/* --- MEDIA QUERY: MOBILE --- */
+@media (max-width: 576px) {
+  /* Hero background agar fokus ke tengah */
+  .hero-background {
+    background-position: center top;
+    min-height: 90vh;
+  }
+
+  .hero-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 0 1rem;
+  }
+
+  .hero-section .display-5 {
+    font-size: 1.6rem;
+  }
+
+  .hero-section p {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Tombol lebih ramping */
+  .hero-section .btn-primary {
+    padding: 0.7rem 1.3rem;
+    font-size: 0.85rem;
+  }
+
+  /* Navbar teks lebih kecil dan mudah diklik */
+  .nav-link {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+  }
+
+  /* Dropdown di HP tampil penuh (agar mudah diklik) */
+  .dropdown-menu {
+    left: 0;
+    right: 0;
+    transform: none;
+    min-width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+    border: none;
+  }
+
+  /* Footer spacing */
+  footer {
+    padding: 30px 10px;
+    font-size: 0.85rem;
   }
 }

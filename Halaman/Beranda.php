@@ -1,5 +1,8 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include "../database/dbConnect.php";
+
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +34,7 @@ include "../database/dbConnect.php";
 
             <!-- Baris Logo-->
             <div class="d-flex justify-content-start align-items-center w-100 position-relative"
-                style="margin-left: 12%; transform: translateY(8px);">
+                style="margin-left: 11.5%; transform: translateY(8px);">
                 <a href="#home" class="d-flex align-items-center text-white text-decoration-none">
                     <img src="../assets/img/CDR_LOGO_DESA.png"
                         alt="Logo Desa Teniga"
@@ -52,9 +55,7 @@ include "../database/dbConnect.php";
             <nav id="main-navigation" class="d-none d-lg-flex justify-content-center text-white small fw-bold mt-3">
                 <a href="../Halaman/Beranda.php" class="nav-link active text-white text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
                 <a href="../Halaman/berita.php" class="nav-link text-white text-decoration-none px-3"><span class="nav-text">KABAR DESA</span></a>
-                <a href="../Halaman/wisata.php" class="nav-link text-white text-decoration-none px-3"><span class="nav-text">OBJEK WISATA</span></a>
                 <a href="../Halaman/pelayanan.php" class="nav-link text-white text-decoration-none px-3"><span class="nav-text">PELAYANAN</span></a>
-                <a href="../Halaman/sejarahDesa.php" class="nav-link text-white text-decoration-none px-3"><span class="nav-text">SEJARAH</span></a>
 
                 <!-- PROFIL DESA -->
                 <div class="dropdown">
@@ -63,7 +64,8 @@ include "../database/dbConnect.php";
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="profilDropdown">
                         <li><a class="dropdown-item" href="../Halaman/profil/lembaga.php">Lembaga Desa</a></li>
-                        <li><a class="dropdown-item" href="../Halaman/profil/Demografi.php">Demografi</a></li>
+                        <li><a class="dropdown-item" href="../Halaman/profil/sejarahDesa.php">Sejarah Desa</a></li>
+                        <li><a class="dropdown-item" href="../Halaman/profil/Demografi.php">Demografi Desa</a></li>
                     </ul>
                 </div>
 
@@ -73,10 +75,14 @@ include "../database/dbConnect.php";
                         <span class="nav-text">PETA INTERAKTIF</span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="petaDropdown">
-                        <li><a class="dropdown-item" href="../Halaman/peta/petaDesa.php">Peta Desa (Umum)</a></li>
-                        <li><a class="dropdown-item" href="#">Peta UMKM</a></li>
+                        <li><a class="dropdown-item" href="../Halaman/peta/petaDesa.php">Peta Desa (UMUM)</a></li>
                     </ul>
                 </div>
+
+                <!-- Objek wisata -->
+                <a href="../Halaman/wisata.php" class="nav-link text-white text-decoration-none px-3"><span class="nav-text">OBJEK WISATA</span></a>
+                <!-- umkm desa -->
+                <a href="../Halaman/umkmDesa.php" class="nav-link text-white text-decoration-none px-3"><span class="nav-text">UMKM DESA</span></a>
             </nav>
         </div>
 

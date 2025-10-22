@@ -2,6 +2,9 @@
 <?php
 include "../../database/dbConnect.php";
 $conn = isset($konek) ? $konek : null;
+
+$currentPage = basename($_SERVER['PHP_SELF']);
+
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +29,7 @@ $conn = isset($konek) ? $konek : null;
         <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100"></div>
         <div class="container position-relative py-3" style="z-index: 20;">
             <div class="d-flex justify-content-between align-items-center w-100 position-relative"
-                style="margin-left: 11%; transform: translateY(8px); margin-bottom: -9px;">
+                style="margin-left: 10.5%; transform: translateY(8px); margin-bottom: -9px;">
                 <a href="../../Halaman/Beranda.php" class="d-flex align-items-center text-black text-decoration-none ms-3 ms-md-0">
                     <img src="../../assets/img/CDR_LOGO_DESA.png"
                         alt="Logo Desa Teniga"
@@ -42,32 +45,43 @@ $conn = isset($konek) ? $konek : null;
                 </button>
             </div>
 
+            <!-- Baris Navigasi -->
             <nav id="main-navigation" class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-4 py-1">
                 <a href="../../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
                 <a href="../../Halaman/berita.php" class="nav-link text-decoration-none px-3"><span class="nav-text">KABAR DESA</span></a>
-                <a href="../../Halaman/wisata.php" class="nav-link text-decoration-none px-3"><span class="nav-text">OBJEK WISATA</span></a>
                 <a href="../../Halaman/pelayanan.php" class="nav-link text-decoration-none px-3"><span class="nav-text">PELAYANAN</span></a>
-                <a href="../../Halaman/sejarahDesa.php" class="nav-link text-decoration-none px-3"><span class="nav-text">SEJARAH</span></a>
 
+                <!-- PROFIL DESA -->
                 <div class="dropdown nav-dropdown">
-                    <a class="nav-link dropdown-toggle text-black text-decoration-none px-3 " href="#" id="profilDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-black text-decoration-none px-3" href="#" id="profilDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="nav-text me-1">PROFIL DESA</span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="profilDropdown">
-                        <li><a class="dropdown-item" href="lembaga.php">Lembaga Desa</a></li>
-                        <li><a class="dropdown-item" href="demografi.php">Demografi</a></li>
+                        <li><a class="dropdown-item" href="../../Halaman/profil/lembaga.php">Lembaga Desa</a></li>
+                        <li><a class="dropdown-item" href="../../Halaman/profil/sejarahDesa.php">Sejarah Desa</a></li>
+                        <li><a class="dropdown-item" href="../../Halaman/profil/Demografi.php">Demografi Desa</a></li>
                     </ul>
                 </div>
 
+                <!-- PETA INTERAKTIF -->
                 <div class="dropdown nav-dropdown">
-                    <a class="nav-link dropdown-toggle text-black text-decoration-none px-3 active" href="#" id="petaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-black active text-decoration-none px-3" href="#" id="petaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="nav-text me-1">PETA INTERAKTIF</span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="petaDropdown">
-                        <li><a class="dropdown-item" href="../peta/petaDesa.php">Peta Desa (Umum)</a></li>
-                        <li><a class="dropdown-item" href="#">Peta UMKM</a></li>
+                        <li>
+                            <a class="dropdown-item <?= ($currentPage == 'petaDesa.php') ? 'active disabled text-secondary' : '' ?>"
+                                href="<?= ($currentPage != 'petaDesa.php') ? '../../Halaman/profil/petaDesa.php' : '#' ?>">
+                                Peta Desa (Umum)
+                            </a>
+                        </li>
                     </ul>
                 </div>
+
+                <!-- Objek wisata -->
+                <a href="../../Halaman/wisata.php" class="nav-link text-black text-decoration-none px-3"><span class="nav-text">OBJEK WISATA</span></a>
+                <!-- umkm desa -->
+                <a href="../../Halaman/umkmDesa.php" class="nav-link text-black text-decoration-none px-3"><span class="nav-text">UMKM DESA</span></a>
             </nav>
         </div>
     </header>
@@ -273,6 +287,7 @@ $conn = isset($konek) ? $konek : null;
                     koordinat: [CENTER_LAT, CENTER_LNG],
                     deskripsi: "Pusat administrasi pemerintahan Desa Teniga.",
                     kategori: "government",
+                    jam: "Buka: 08.00 - 16.00",
                     icon: createCustomIcon('building-2', 'government'),
                     group: governmentGroup
                 },
@@ -281,6 +296,7 @@ $conn = isset($konek) ? $konek : null;
                     koordinat: [-8.4169, 116.1429],
                     deskripsi: "Pelayanan kesehatan tingkat desa untuk masyarakat.",
                     kategori: "health",
+                    jam: "Buka: 07.00 - 14.00",
                     icon: createCustomIcon('hospital', 'health'),
                     group: healthGroup
                 },
@@ -289,6 +305,7 @@ $conn = isset($konek) ? $konek : null;
                     koordinat: [-8.4189, 116.1441],
                     deskripsi: "Sekolah dasar negeri di wilayah Teniga.",
                     kategori: "education",
+                    jam: "Buka: 07.00 - 12.00",
                     icon: createCustomIcon('school', 'education'),
                     group: educationGroup
                 },
@@ -297,6 +314,7 @@ $conn = isset($konek) ? $konek : null;
                     koordinat: [-8.4194, 116.1417],
                     deskripsi: "Taman kanak-kanak Pertiwi Teniga.",
                     kategori: "education",
+                    jam: "Buka: 07.30 - 11.30",
                     icon: createCustomIcon('school', 'education'),
                     group: educationGroup
                 },
@@ -305,6 +323,7 @@ $conn = isset($konek) ? $konek : null;
                     koordinat: [-8.4178, 116.1436],
                     deskripsi: "Masjid utama Desa Teniga tempat ibadah warga.",
                     kategori: "worship",
+                    jam: "Buka: 24 Jam",
                     icon: createCustomIcon('moon-star', 'worship'),
                     group: worshipGroup
                 },
@@ -313,6 +332,7 @@ $conn = isset($konek) ? $konek : null;
                     koordinat: [-8.4175, 116.1413],
                     deskripsi: "Pusat kegiatan ekonomi dan pasar mingguan.",
                     kategori: "commerce",
+                    jam: "Buka: 06.00 - 17.00",
                     icon: createCustomIcon('store', 'commerce'),
                     group: commerceGroup
                 },
@@ -321,18 +341,21 @@ $conn = isset($konek) ? $konek : null;
                     koordinat: [-8.4150, 116.1405],
                     deskripsi: "Pusat pelayanan kesehatan rutin dan kegiatan sosial untuk warga senior.",
                     kategori: "social",
+                    jam: "Buka: 08.00 - 12.00 (Hari Rabu & Jumat)",
                     icon: createCustomIcon('heart-handshake', 'social'),
                     group: socialGroup
                 },
                 {
                     nama: "Balai Pertemuan Warga",
                     koordinat: [-8.4201, 116.1430],
-                    deskripsi: "Tempat berkumpulnya komunitas, termasuk kegiatan sosial dan pertemuan warga lanjut usia.",
+                    deskripsi: "Tempat berkumpulnya komunitas, termasuk kegiatan sosial dan pertemuan warga.",
                     kategori: "social",
+                    jam: "Buka: 08.00 - 21.00",
                     icon: createCustomIcon('heart-handshake', 'social'),
                     group: socialGroup
                 }
             ];
+
 
             const mainCircleData = {
                 nama: "Wilayah Desa Teniga",
@@ -359,18 +382,27 @@ $conn = isset($konek) ? $konek : null;
 
                 marker.bindPopup(`
                     <div class="font-inter">
-                        <h4 class="fw-bold fs-6 text-gray-800">${tempat.nama}</h4>
-                        <p class="small text-gray-600">${tempat.deskripsi}</p>
+                        <h4 class="fw-bold fs-6 text-gray-800 mb-1">${tempat.nama}</h4>
+                        <p class="small text-gray-600 mb-2">${tempat.deskripsi}</p>
+
+                        <div class="d-flex align-items-center mb-2">
+                            <i data-lucide="clock" class="me-2 text-success" style="width: 1rem; height: 1rem;"></i>
+                            <span class="small text-success fw-semibold">${tempat.jam}</span>
+                        </div>
+
                         <hr class="my-2 text-gray-200">
-                        <a href="http://maps.google.com/maps?q=$${tempat.koordinat[0]},${tempat.koordinat[1]}" target="_blank" class="d-inline-flex align-items-center text-primary text-decoration-none fw-medium small transition">
+                        <a href="http://maps.google.com/maps?q=${tempat.koordinat[0]},${tempat.koordinat[1]}" 
+                        target="_blank" 
+                        class="d-inline-flex align-items-center text-primary text-decoration-none fw-medium small transition">
                             <i data-lucide="map-pin" style="width: 1rem; height: 1rem;" class="me-1"></i>
                             Lihat Rute di Google Maps
                         </a>
                     </div>
                 `).on('popupopen', function() {
-                    // Re-render Lucide Icons di dalam popup juga
+                    // Re-render ikon Lucide agar ikon jam dan pin muncul
                     lucide.createIcons();
                 });
+
             });
 
             const mainCircle = L.circle(mainCircleData.koordinat, {

@@ -150,7 +150,7 @@ if ($conn) {
         <div class="container position-relative py-3" style="z-index: 20;">
             <!-- Baris Logo -->
             <div class="d-flex justify-content-between align-items-center w-100 position-relative"
-                style="margin-left: 12%; transform: translateY(8px); margin-bottom: -9px;">
+                style="margin-left: 10.5%; transform: translateY(8px); margin-bottom: -9px;">
                 <a href="../Halaman/Beranda.php" class="d-flex align-items-center text-black text-decoration-none ms-3 ms-md-0">
                     <img src="../assets/img/CDR_LOGO_DESA.png"
                         alt="Logo Desa Teniga"
@@ -167,13 +167,12 @@ if ($conn) {
                 </button>
             </div>
 
+
             <!-- Baris Navigasi -->
             <nav id="main-navigation" class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-4 py-1">
                 <a href="../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
                 <a href="../Halaman/berita.php" class="nav-link text-decoration-none px-3"><span class="nav-text">KABAR DESA</span></a>
-                <a href="../Halaman/wisata.php" class="nav-link active text-decoration-none px-3"><span class="nav-text">OBJEK WISATA</span></a>
                 <a href="../Halaman/pelayanan.php" class="nav-link text-decoration-none px-3"><span class="nav-text">PELAYANAN</span></a>
-                <a href="../Halaman/sejarahDesa.php" class="nav-link text-decoration-none px-3"><span class="nav-text">SEJARAH</span></a>
 
                 <!-- PROFIL DESA -->
                 <div class="dropdown nav-dropdown">
@@ -182,7 +181,8 @@ if ($conn) {
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="profilDropdown">
                         <li><a class="dropdown-item" href="../Halaman/profil/lembaga.php">Lembaga Desa</a></li>
-                        <li><a class="dropdown-item" href="../Halaman/profil/Demografi.php">Demografi</a></li>
+                        <li><a class="dropdown-item" href="../Halaman/profil/sejarahDesa.php">Sejarah Desa</a></li>
+                        <li><a class="dropdown-item" href="../Halaman/profil/Demografi.php">Demografi Desa</a></li>
                     </ul>
                 </div>
 
@@ -193,9 +193,14 @@ if ($conn) {
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="petaDropdown">
                         <li><a class="dropdown-item" href="../Halaman/peta/petaDesa.php">Peta Desa (Umum)</a></li>
-                        <li><a class="dropdown-item" href="#">Peta UMKM</a></li>
                     </ul>
                 </div>
+
+                <!-- Objek wisata -->
+                <a href="../Halaman/wisata.php" class="nav-link text-black active text-decoration-none px-3"><span class="nav-text">OBJEK WISATA</span></a>
+                <!-- umkm desa -->
+                <a href="../Halaman/umkmDesa.php" class="nav-link text-black text-decoration-none px-3"><span class="nav-text">UMKM DESA</span></a>
+            </nav>
             </nav>
         </div>
     </header>

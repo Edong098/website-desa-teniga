@@ -1,0 +1,47 @@
+# -------------------------------
+# 🔒 KEAMANAN DASAR WEBSITE
+# -------------------------------
+
+# Matikan directory listing (biar isi folder tidak tampil)
+Options -Indexes
+
+# Nonaktifkan akses ke file sistem atau konfigurasi
+<FilesMatch "(^\.|composer\.(json|lock)|package\.json|yarn\.lock|env|ini|log|htaccess)$">
+    Require all denied
+</FilesMatch>
+
+# Lindungi file sensitif database / konfigurasi
+<FilesMatch "(dbConnect\.php|db\.php|config\.php)$">
+    Require all denied
+</FilesMatch>
+
+# -------------------------------
+# 🔁 KONFIGURASI REWRITE ENGINE
+# -------------------------------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Izinkan akses ke folder Halaman, assets, dan logs
+    RewriteCond %{REQUEST_URI} ^/(Website%20Kantor%20Desa%20Teniga/)?(Halaman|assets|logs) [NC]
+    RewriteRule .* - [L]
+
+    # Tolak akses langsung ke folder database
+    RewriteCond %{REQUEST_URI} ^/(Website%20Kantor%20Desa%20Teniga/)?database [NC]
+    RewriteRule .* error403.php [L,R=403]
+
+    # Tangani file tidak ditemukan
+    ErrorDocument 403 /error403.php
+    ErrorDocument 404 /error404.php
+</IfModule>
+
+# -------------------------------
+# 🔧 TAMBAHAN (OPSIONAL)
+# -------------------------------
+
+# Paksa file PHP dijalankan sebagai PHP
+AddType application/x-httpd-php .php
+
+# Aktifkan Gzip compression (hemat bandwidth)
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript
+</IfModule>

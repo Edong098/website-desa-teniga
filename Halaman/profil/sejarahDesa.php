@@ -1,32 +1,34 @@
 <?php
-include "../database/dbConnect.php";
+include "../../database/dbConnect.php";
 $conn = isset($konek) ? $konek : null;
 
-$all_services = [];
-$table_name = "tb_pelayanan";
-$id_column = 'id_pelayanan';
-$link_base = 'detailPelayanan.php?id=';
+$currentPage = basename($_SERVER['PHP_SELF']);
 
-$limit = 9;
+$all_services = [];
+$table_name = "tb_sejarah";
+$id_column = 'id';
+$link_base = 'detailSejarah.php?id=';
+
+// Pengaturan Pagination
+$limit = 5;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $page = max(1, $page);
-
-$default_date_info = 'Informasi Tanggal Tidak Tersedia';
+$default_date_info = 'Tanggal Tidak Tersedia';
 
 
 if ($conn) {
-    $total_result = $conn->query("SELECT COUNT(*) AS total FROM $table_name WHERE status = 'Aktif'");
+    $total_result = $conn->query("SELECT COUNT(*) AS total FROM $table_name");
     $total_row = $total_result->fetch_assoc();
     $total_records = $total_row['total'];
 
     $total_pages = ceil($total_records / $limit);
     $total_pages = max(1, $total_pages);
 
+    // Hitung offset database
     $offset = ($page - 1) * $limit;
 
-    // Ambil Semua Data Pelayanan (Tanpa ORDER BY)
     $all_services_query = "SELECT * FROM $table_name 
-                              WHERE status = 'Aktif'
+                              ORDER BY tanggal_post DESC 
                               LIMIT $limit OFFSET $offset";
 
     $all_services_result = $conn->query($all_services_query);
@@ -35,31 +37,31 @@ if ($conn) {
         while ($row = $all_services_result->fetch_assoc()) {
             $image = !empty($row['gambar'])
                 ? "../assets/img/" . $row['gambar']
-                : "https://placehold.co/400x300/e8c24a/ffffff?text=Placeholder";
+                : "https://placehold.co/400x300/e8c24a/ffffff?text=Sejarah+Desa";
             $link = $link_base . ($row[$id_column] ?? '');
+            $date_formatted = !empty($row['tanggal_post']) ? date('d F Y', strtotime($row['tanggal_post'])) : $default_date_info;
 
             $all_services[] = [
-                'title' => !empty($row['nama_pelayanan']) ? $row['nama_pelayanan'] : 'Layanan Desa',
-                'excerpt' => !empty($row['deskripsi']) ? substr(strip_tags($row['deskripsi']), 0, 80) . '...' : 'Ringkasan singkat pelayanan.',
+                'title' => !empty($row['judul']) ? $row['judul'] : 'Judul Sejarah',
+                'excerpt' => !empty($row['isi']) ? substr(strip_tags($row['isi']), 0, 250) . '...' : 'Ringkasan singkat sejarah. Isi lebih panjang karena menggunakan paragraf.',
                 'image' => $image,
                 'link' => $link,
-                'date' => $default_date_info,
-                'category' => strtoupper($row['status'] ?? 'Aktif')
+                'date' => $date_formatted,
+                'category' => ucwords($row['penulis'] ?? 'Admin')
             ];
         }
     }
 } else {
-    error_log('Database connection error in pelayanan.php');
-
-    // Data dummy jika koneksi gagal
+    // Logika dummy jika koneksi gagal
+    error_log('Database connection error in sejarahDesa.php');
     for ($i = 0; $i < $limit; $i++) {
         $all_services[] = [
-            'title' => 'Layanan Dummy ' . ($i + 1),
-            'excerpt' => 'Deskripsi singkat layanan dummy.',
-            'image' => "https://placehold.co/400x300/4a86e8/ffffff?text=Placeholder+Layanan",
+            'title' => 'Sejarah Dummy ' . ($i + 1),
+            'excerpt' => 'Ini adalah konten sejarah desa yang dibuat sebagai placeholder karena koneksi database gagal. Teks paragraf ini mewakili ringkasan kisah sejarah tersebut.',
+            'image' => "https://placehold.co/400x300/4a86e8/ffffff?text=Placeholder+Sejarah",
             'link' => '#',
-            'date' => $default_date_info,
-            'category' => 'DUMMY'
+            'date' => date('d F Y'),
+            'category' => 'Dummy Admin'
         ];
     }
     $total_pages = 2;
@@ -73,12 +75,12 @@ if ($conn) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pelayanan Desa Teniga</title>
+    <title>Sejarah Desa Teniga</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="../assets/CSS/pelayanan.css">
+    <link rel="stylesheet" href="../../assets/CSS/sejarah.css">
 </head>
 
 <body class="bg-light">
@@ -90,7 +92,7 @@ if ($conn) {
             <div class="d-flex justify-content-between align-items-center w-100 position-relative"
                 style="margin-left: 10.5%; transform: translateY(8px); margin-bottom: -9px;">
                 <a href="../Halaman/Beranda.php" class="d-flex align-items-center text-black text-decoration-none ms-3 ms-md-0">
-                    <img src="../assets/img/CDR_LOGO_DESA.png"
+                    <img src="../../assets/img/CDR_LOGO_DESA.png"
                         alt="Logo Desa Teniga"
                         style="height:40px; margin-bottom: 2px;">
                     <div class="d-flex flex-column ms-2">
@@ -106,19 +108,24 @@ if ($conn) {
 
             <!-- Baris Navigasi -->
             <nav id="main-navigation" class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-4 py-1">
-                <a href="../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
-                <a href="../Halaman/berita.php" class="nav-link text-decoration-none px-3"><span class="nav-text">KABAR DESA</span></a>
-                <a href="../Halaman/pelayanan.php" class="nav-link active text-decoration-none px-3"><span class="nav-text">PELAYANAN</span></a>
+                <a href="../../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
+                <a href="../../Halaman/berita.php" class="nav-link text-decoration-none px-3"><span class="nav-text">KABAR DESA</span></a>
+                <a href="../../Halaman/pelayanan.php" class="nav-link text-decoration-none px-3"><span class="nav-text">PELAYANAN</span></a>
 
                 <!-- PROFIL DESA -->
                 <div class="dropdown nav-dropdown">
-                    <a class="nav-link dropdown-toggle text-black text-decoration-none px-3" href="#" id="profilDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-black active text-decoration-none px-3" href="#" id="profilDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="nav-text me-1">PROFIL DESA</span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="profilDropdown">
-                        <li><a class="dropdown-item" href="../Halaman/profil/lembaga.php">Lembaga Desa</a></li>
-                        <li><a class="dropdown-item" href="../Halaman/profil/sejarahDesa.php">Sejarah Desa</a></li>
-                        <li><a class="dropdown-item" href="../Halaman/profil/Demografi.php">Demografi Desa</a></li>
+                        <li><a class="dropdown-item" href="../../Halaman/profil/lembaga.php">Lembaga Desa</a></li>
+                        <li>
+                            <a class="dropdown-item <?= ($currentPage == 'sejarahDesa.php') ? 'active disabled text-secondary' : '' ?>"
+                                href="<?= ($currentPage != 'sejarahDesa.php') ? '../../Halaman/profil/sejarahDesa.php' : '#' ?>">
+                                Sejarah Desa
+                            </a>
+                        </li>
+                        <li><a class="dropdown-item" href="../../Halaman/profil/Demografi.php">Demografi Desa</a></li>
                     </ul>
                 </div>
 
@@ -128,62 +135,69 @@ if ($conn) {
                         <span class="nav-text me-1">PETA INTERAKTIF</span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="petaDropdown">
-                        <li><a class="dropdown-item" href="../Halaman/peta/petaDesa.php">Peta Desa (Umum)</a></li>
+                        <li><a class="dropdown-item" href="../../Halaman/peta/petaDesa.php">Peta Desa (Umum)</a></li>
                     </ul>
                 </div>
 
                 <!-- Objek wisata -->
-                <a href="../Halaman/wisata.php" class="nav-link text-black text-decoration-none px-3"><span class="nav-text">OBJEK WISATA</span></a>
+                <a href="../../Halaman/wisata.php" class="nav-link text-black text-decoration-none px-3"><span class="nav-text">OBJEK WISATA</span></a>
                 <!-- umkm desa -->
-                <a href="../Halaman/umkmDesa.php" class="nav-link text-black text-decoration-none px-3"><span class="nav-text">UMKM DESA</span></a>
+                <a href="../../Halaman/umkmDesa.php" class="nav-link text-black text-decoration-none px-3"><span class="nav-text">UMKM DESA</span></a>
             </nav>
         </div>
     </header>
 
     <section class="pt-5 pb-4 bg-white">
         <div class="container text-center">
-            <h2 class="display-6 fw-bold font-poppins text-dark-blue mb-2">Daftar Pelayanan Administrasi Desa</h2>
-            <p class="fs-5 text-muted">Telusuri semua informasi dan prosedur pelayanan yang tersedia di kantor desa.</p>
+            <h2 class="display-6 fw-bold font-poppins text-dark-blue mb-2">Sejarah dan Asal Usul Desa Teniga</h2>
+            <p class="fs-5 text-muted">Dokumentasi kisah, peristiwa, dan perkembangan penting desa dari masa ke masa.</p>
             <hr class="w-25 mx-auto">
         </div>
     </section>
 
     <section class="py-5 bg-light">
         <div class="container">
-            <h3 class="fw-bold text-center mb-5 d-none">Semua Daftar Pelayanan</h3>
 
             <?php if (!empty($all_services)): ?>
-                <div class="row g-4 justify-content-center">
-                    <?php foreach ($all_services as $card): ?>
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-                            <a href="<?php echo htmlspecialchars($card['link']); ?>"
-                                class="card h-100 shadow service-card text-decoration-none text-dark">
-                                <img src="<?php echo htmlspecialchars($card['image']); ?>"
-                                    class="card-img-top rounded-top"
-                                    alt="<?php echo htmlspecialchars($card['title']); ?>">
-                                <div class="card-body d-flex flex-column p-4">
-                                    <span class="badge rounded-pill bg-primary mb-2 fw-medium"
-                                        style="width: fit-content;">
-                                        <?php echo htmlspecialchars($card['category']); ?>
-                                    </span>
-                                    <h5 class="card-title fw-bold mb-2 line-clamp-2">
-                                        <?php echo htmlspecialchars($card['title']); ?>
-                                    </h5>
-                                    <p class="card-text text-secondary small flex-grow-1 line-clamp-3">
-                                        <?php echo htmlspecialchars($card['excerpt']); ?>
-                                    </p>
-                                    <p class="text-muted small mb-0 mt-2">
-                                        <i data-lucide="calendar" style="width:14px;height:14px;"></i>
-                                        <?php echo htmlspecialchars($card['date']); ?>
-                                    </p>
-                                    <span class="mt-2 text-primary small fw-semibold">
-                                        Lihat Prosedur
-                                        <i data-lucide="arrow-right" class="ms-1" style="width:14px;height:14px;"></i>
-                                    </span>
+                <div class="row justify-content-center">
+                    <div class="col-lg-10 col-md-12">
+                        <?php foreach ($all_services as $item): ?>
+                            <div class="history-entry">
+                                <div class="history-entry-image-wrapper">
+                                    <img src="<?php echo htmlspecialchars($item['image']); ?>"
+                                        class="history-entry-image"
+                                        alt="Gambar <?php echo htmlspecialchars($item['title']); ?>">
                                 </div>
-                            </a>
-                        </div>
-                    <?php endforeach; ?>
+                                <div class="history-entry-content">
+                                    <a href="<?php echo htmlspecialchars($item['link']); ?>" class="text-decoration-none">
+                                        <h3 class="history-entry-title">
+                                            <?php echo htmlspecialchars($item['title']); ?>
+                                        </h3>
+                                    </a>
+
+                                    <div class="history-entry-meta">
+                                        <span>
+                                            <i data-lucide="calendar"></i>
+                                            **Tanggal:** <?php echo htmlspecialchars($item['date']); ?>
+                                        </span>
+                                        <span>
+                                            <i data-lucide="user"></i>
+                                            **Penulis:** <?php echo htmlspecialchars($item['category']); ?>
+                                        </span>
+                                    </div>
+
+                                    <p class="history-entry-excerpt">
+                                        <?php echo nl2br(htmlspecialchars($item['excerpt'])); ?>
+                                    </p>
+
+                                    <a href="<?php echo htmlspecialchars($item['link']); ?>" class="read-more-link text-decoration-none">
+                                        Baca Kisah Lengkap
+                                        <i data-lucide="arrow-right" class="ms-1" style="width:16px;height:16px;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
 
                 <div class="mt-5">
@@ -197,7 +211,6 @@ if ($conn) {
                                 </li>
 
                                 <?php
-                                // Tampilkan halaman di sekitar halaman saat ini
                                 $start_page = max(1, $page - 2);
                                 $end_page = min($total_pages, $page + 2);
 
@@ -236,7 +249,7 @@ if ($conn) {
                 </div>
             <?php else: ?>
                 <div class="alert alert-info text-center shadow-sm">
-                    Tidak ada data pelayanan yang tersedia.
+                    Saat ini tidak ada data sejarah yang tersedia.
                 </div>
             <?php endif; ?>
         </div>
@@ -254,7 +267,7 @@ if ($conn) {
     <script>
         lucide.createIcons();
 
-        // Logika Dropdown dan Hover (Sama)
+        // Logika Dropdown dan Hover
         (function() {
             const LONGPRESS_MS = 400;
 

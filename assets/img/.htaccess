@@ -1,0 +1,9 @@
+# Hanya boleh akses file gambar
+<FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+    Require all granted
+</FilesMatch>
+
+# Blokir PHP agar tidak dieksekusi di folder ini
+<FilesMatch "\.(php|php5|php7|phtml)$">
+    Deny from all
+</FilesMatch>
