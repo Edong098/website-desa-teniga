@@ -1,9 +1,0 @@
-# Izinkan semua halaman PHP diakses
-
-<FilesMatch "\.php$">
-Require all granted
-</FilesMatch>
-
-# Nonaktifkan directory listing
-
-Options -Indexes

@@ -1,9 +1,0 @@
-# Boleh diakses hanya file error403.php & error404.php
-<FilesMatch "(error403\.php|error404\.php)$">
-    Require all granted
-</FilesMatch>
-
-# Tolak semua file lain
-<FilesMatch ".*">
-    Require all denied
-</FilesMatch>

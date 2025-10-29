@@ -1,4 +1,5 @@
 <?php
+// Pastikan file dbConnect.php ada dan menyediakan variabel $konek
 include "../database/dbConnect.php";
 
 $conn = null;
@@ -11,7 +12,11 @@ $three_cards = [];
 $three_more_cards = [];
 $all_wisata = [];
 
-$limit = 6;
+// --- PERUBAHAN UTAMA DI SINI ---
+// Batas data untuk pagination per halaman (halaman 2, 3, dst.)
+$limit_per_page = 3;
+// Jumlah data yang akan ditampilkan di halaman 1 di bagian 'Semua Destinasi Wisata Lainnya'
+$limit_first_page = 3;
 
 if ($conn) {
     // 1. Mengambil data untuk Carousel (Wisata Unggulan - 4 data)
@@ -19,7 +24,8 @@ if ($conn) {
     $carousel_result = $conn->query($carousel_query);
     if ($carousel_result) {
         while ($row = $carousel_result->fetch_assoc()) {
-            $image = !empty($row['gambar']) ? "../assets/img/" . $row['gambar'] : "https://placehold.co/1200x500/A0D1F3/ffffff?text=Wisata+Unggulan+Belum+Ada+Gambar";
+            // Path: ../uploads/wisata/
+            $image = !empty($row['gambar']) ? "../uploads/wisata/" . $row['gambar'] : "https://placehold.co/1200x500/A0D1F3/ffffff?text=Wisata+Unggulan+Belum+Ada+Gambar";
             $link = !empty($row['link']) ? $row['link'] : 'detailWisata.php?id=' . ($row['id'] ?? '');
 
             $carousel_items[] = [
@@ -34,11 +40,13 @@ if ($conn) {
     }
 
     // 2. Mengambil 3 Wisata Pilihan di bawah Carousel (Offset 4, Limit 3)
-    $three_cards_query = "SELECT * FROM tb_wisata ORDER BY tanggal DESC LIMIT 4 OFFSET 4";
+    // Dimulai setelah 4 data carousel
+    $three_cards_query = "SELECT * FROM tb_wisata ORDER BY tanggal DESC LIMIT 3 OFFSET 4";
     $three_cards_result = $conn->query($three_cards_query);
     if ($three_cards_result) {
         while ($row = $three_cards_result->fetch_assoc()) {
-            $image = !empty($row['gambar']) ? "../assets/img/" . $row['gambar'] : "https://placehold.co/400x300/F4D03F/333333?text=Wisata+Pilihan+1+Gambar";
+            // Path: ../uploads/wisata/
+            $image = !empty($row['gambar']) ? "../uploads/wisata/" . $row['gambar'] : "https://placehold.co/400x300/F4D03F/333333?text=Wisata+Pilihan+1+Gambar";
             $link = !empty($row['link']) ? $row['link'] : 'detailWisata.php?id=' . ($row['id'] ?? '');
 
             $three_cards[] = [
@@ -53,11 +61,13 @@ if ($conn) {
     }
 
     // 3. Mengambil 3 Kartu Tambahan (Offset 7, Limit 3)
-    $three_more_cards_query = "SELECT * FROM tb_wisata ORDER BY tanggal DESC LIMIT 6 OFFSET 7";
+    // Dimulai setelah 7 data sebelumnya (4+3)
+    $three_more_cards_query = "SELECT * FROM tb_wisata ORDER BY tanggal DESC LIMIT 3 OFFSET 7";
     $three_more_cards_result = $conn->query($three_more_cards_query);
     if ($three_more_cards_result) {
         while ($row = $three_more_cards_result->fetch_assoc()) {
-            $image = !empty($row['gambar']) ? "../assets/img/" . $row['gambar'] : "https://placehold.co/400x300/F4D03F/333333?text=Wisata+Pilihan+2+Gambar";
+            // Path: ../uploads/wisata/
+            $image = !empty($row['gambar']) ? "../uploads/wisata/" . $row['gambar'] : "https://placehold.co/400x300/F4D03F/333333?text=Wisata+Pilihan+2+Gambar";
             $link = !empty($row['link']) ? $row['link'] : 'detailWisata.php?id=' . ($row['id'] ?? '');
 
             $three_more_cards[] = [
@@ -72,33 +82,57 @@ if ($conn) {
     }
 
 
-    // 4. PAGINATION dan Mengambil Semua Wisata Lainnya (Dimulai dari data ke-11)
+    // 4. PAGINATION dan Mengambil Semua Wisata Lainnya 
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-    $exclude_count = 10; // Mengeluarkan 10 data yang sudah ditampilkan di atas (4 carousel + 3 card Pilihan + 3 card Tambahan)
+
+    // Total data yang sudah ditampilkan sebelum bagian ini
+    $initial_exclude_count = 4 + 3 + 3; // 10 data (Carousel + Pilihan 1 + Pilihan 2)
 
     $total_result = $conn->query("SELECT COUNT(*) AS total FROM tb_wisata");
     $total_row = $total_result->fetch_assoc();
     $total_records = $total_row['total'];
 
-    // Total record yang harus di-paginate
-    $paginated_records = max(0, $total_records - $exclude_count);
-    $total_pages = ceil($paginated_records / $limit);
-    $total_pages = max(1, $total_pages); // Minimal 1 halaman
+    // Hitung jumlah record yang akan dipaginasi (setelah 10 data awal)
+    $paginated_records = max(0, $total_records - $initial_exclude_count);
 
-    // Hitung offset yang disesuaikan
-    $offset = ($page - 1) * $limit;
-    $db_offset = $offset + $exclude_count;
+    // Karena halaman 1 (di bagian ini) menampilkan $limit_first_page (3 data)
+    // dan halaman berikutnya menampilkan $limit_per_page (3 data)
+
+    // Hitung sisa record setelah halaman 1 (di bagian ini)
+    $remaining_records_after_first_page = max(0, $paginated_records - $limit_first_page);
+
+    // Hitung total halaman yang dibutuhkan
+    $total_pages = 1; // Minimal 1 halaman (untuk $limit_first_page data)
+    if ($remaining_records_after_first_page > 0) {
+        $total_pages += ceil($remaining_records_after_first_page / $limit_per_page);
+    }
+    $total_pages = max(1, $total_pages);
+
+
+    // Logika penentuan LIMIT dan OFFSET untuk query
+    if ($page == 1) {
+        // Halaman 1: Tampilkan $limit_first_page (3) data, dimulai dari OFFSET 10
+        $limit_query = $limit_first_page;
+        $db_offset = $initial_exclude_count;
+    } else {
+        // Halaman 2, 3, dst: Tampilkan $limit_per_page (3) data
+        // OFFSET: 10 (awal) + 3 (hal 1) + ($page - 2) * 3
+        $limit_query = $limit_per_page;
+        $db_offset = $initial_exclude_count + $limit_first_page + (($page - 2) * $limit_per_page);
+    }
 
     if ($db_offset < $total_records) {
         $all_wisata_query = "SELECT * FROM tb_wisata 
                              ORDER BY tanggal DESC 
-                             LIMIT $limit OFFSET $db_offset";
+                             LIMIT $limit_query OFFSET $db_offset";
 
         $all_wisata_result = $conn->query($all_wisata_query);
 
         if ($all_wisata_result) {
             while ($row = $all_wisata_result->fetch_assoc()) {
-                $image = !empty($row['gambar']) ? "../assets/img/" . $row['gambar'] : "https://placehold.co/400x300/6A8FD1/ffffff?text=Objek+Wisata+Lainnya+Gambar";
+                // *** JALUR GAMBAR SUDAH BENAR ***
+                $image = !empty($row['gambar']) ? "../uploads/wisata/" . $row['gambar'] : "https://placehold.co/400x300/6A8FD1/ffffff?text=Objek+Wisata+Lainnya+Gambar";
+
                 $link = !empty($row['link']) ? $row['link'] : 'detailWisata.php?id=' . ($row['id'] ?? '');
 
                 $all_wisata[] = [
@@ -113,6 +147,7 @@ if ($conn) {
         }
     }
 } else {
+    // Logika fallback jika koneksi DB gagal
     error_log('Database connection error in wisata.php');
     $carousel_items[] = ['title' => 'Sample (DB Gagal)', 'excerpt' => 'Pastikan koneksi database Anda benar.', 'image' => "https://placehold.co/1200x500/FF0000/ffffff?text=ERROR:+KONEKSI+DB+GAGAL", 'link' => '#', 'date' => '01 Januari 2023', 'category' => 'Error'];
     for ($i = 0; $i < 3; $i++) {
@@ -121,10 +156,11 @@ if ($conn) {
     for ($i = 0; $i < 3; $i++) {
         $three_more_cards[] = ['title' => 'Pilihan 2-' . ($i + 1), 'excerpt' => 'Contoh deskripsi.', 'image' => "https://placehold.co/400x300/F4D03F/333333?text=Placeholder+Tambahan", 'link' => '#', 'date' => '02 Januari 2023', 'category' => 'Contoh'];
     }
-    for ($i = 0; $i < 6; $i++) {
+    // HANYA 3 data untuk halaman 1 di bagian ini
+    for ($i = 0; $i < 3; $i++) {
         $all_wisata[] = ['title' => 'Objek ' . ($i + 1), 'excerpt' => 'Ini adalah ringkasan.', 'image' => "https://placehold.co/400x300/6A8FD1/ffffff?text=Placeholder+Lainnya", 'link' => '#', 'date' => '03 Januari 2023', 'category' => 'Contoh'];
     }
-    $total_pages = 2;
+    $total_pages = 3;
     $page = 1;
 }
 ?>
@@ -146,9 +182,7 @@ if ($conn) {
 <body class="bg-light">
     <header class="hero-background position-relative">
         <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100"></div>
-        <!-- Navbar -->
         <div class="container position-relative py-3" style="z-index: 20;">
-            <!-- Baris Logo -->
             <div class="d-flex justify-content-between align-items-center w-100 position-relative"
                 style="margin-left: 10.5%; transform: translateY(8px); margin-bottom: -9px;">
                 <a href="../Halaman/Beranda.php" class="d-flex align-items-center text-black text-decoration-none ms-3 ms-md-0">
@@ -161,20 +195,17 @@ if ($conn) {
                     </div>
                 </a>
 
-                <!-- Tombol Mobile -->
-                <button id="mobile-menu-btn" class="d-lg-none text-white border-0 bg-transparent me-3 me-md-0" aria-label="Toggle menu">
+                <button id="mobile-menu-btn" class="d-lg-none text-black border-0 bg-transparent me-3 me-md-0" aria-label="Toggle menu">
                     <i data-lucide="menu" style="width:28px;height:28px"></i>
                 </button>
             </div>
 
 
-            <!-- Baris Navigasi -->
             <nav id="main-navigation" class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-4 py-1">
                 <a href="../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
                 <a href="../Halaman/berita.php" class="nav-link text-decoration-none px-3"><span class="nav-text">KABAR DESA</span></a>
                 <a href="../Halaman/pelayanan.php" class="nav-link text-decoration-none px-3"><span class="nav-text">PELAYANAN</span></a>
 
-                <!-- PROFIL DESA -->
                 <div class="dropdown nav-dropdown">
                     <a class="nav-link dropdown-toggle text-black text-decoration-none px-3" href="#" id="profilDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="nav-text me-1">PROFIL DESA</span>
@@ -186,9 +217,8 @@ if ($conn) {
                     </ul>
                 </div>
 
-                <!-- PETA INTERAKTIF -->
                 <div class="dropdown nav-dropdown">
-                    <a class="nav-link dropdown-toggle text-black text-decoration-none px-3" href="#" id="petaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-black text-decoration-none px-3" href="#" id="petaDropdown" aria-expanded="false">
                         <span class="nav-text me-1">PETA INTERAKTIF</span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="petaDropdown">
@@ -196,12 +226,45 @@ if ($conn) {
                     </ul>
                 </div>
 
-                <!-- Objek wisata -->
                 <a href="../Halaman/wisata.php" class="nav-link text-black active text-decoration-none px-3"><span class="nav-text">OBJEK WISATA</span></a>
-                <!-- umkm desa -->
                 <a href="../Halaman/umkmDesa.php" class="nav-link text-black text-decoration-none px-3"><span class="nav-text">UMKM DESA</span></a>
             </nav>
-            </nav>
+        </div>
+
+        <div class="mobile-menu" id="mobile-menu">
+            <div class="mobile-menu-header">
+                <h5 class="fw-bold mb-0">Menu Navigasi</h5>
+                <button id="close-menu-btn" class="border-0 bg-transparent" aria-label="Close menu">
+                    <i data-lucide="x" style="width:24px;height:24px; color: #333;"></i>
+                </button>
+            </div>
+
+            <a href="../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
+            <a href="../Halaman/berita.php" class="nav-link text-decoration-none px-3"><span class="nav-text">KABAR DESA</span></a>
+            <a href="../Halaman/pelayanan.php" class="nav-link text-decoration-none px-3"><span class="nav-text">PELAYANAN</span></a>
+
+            <div class="dropdown nav-dropdown">
+                <a class="nav-link dropdown-toggle text-black text-decoration-none px-3" href="#" id="profilDropdown" aria-expanded="false">
+                    <span class="nav-text me-1">PROFIL DESA</span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="profilDropdown">
+                    <li><a class="dropdown-item" href="../Halaman/profil/lembaga.php">Lembaga Desa</a></li>
+                    <li><a class="dropdown-item" href="../Halaman/profil/sejarahDesa.php">Sejarah Desa</a></li>
+                    <li><a class="dropdown-item" href="../Halaman/profil/Demografi.php">Demografi Desa</a></li>
+                </ul>
+            </div>
+
+            <div class="dropdown nav-dropdown">
+                <a class="nav-link dropdown-toggle text-black text-decoration-none px-3" href="#" id="petaDropdown" aria-expanded="false">
+                    <span class="nav-text me-1">PETA INTERAKTIF</span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="petaDropdown">
+                    <li><a class="dropdown-item" href="../Halaman/peta/petaDesa.php">Peta Desa (Umum)</a></li>
+                </ul>
+            </div>
+
+            <a href="../Halaman/wisata.php" class="nav-link text-black active text-decoration-none px-3"><span class="nav-text">OBJEK WISATA</span></a>
+            <a href="../Halaman/umkmDesa.php" class="nav-link text-black text-decoration-none px-3"><span class="nav-text">UMKM DESA</span></a>
         </div>
     </header>
 
@@ -257,166 +320,185 @@ if ($conn) {
         </div>
     </section>
 
-    <section class="py-5 bg-light">
-        <div class="container my-5">
-            <h3 class="fw-bold text-center mb-4">Tiga Destinasi Pilihan Terbaik</h3>
-
-            <!-- 3 Wisata Pilihan -->
-            <div class="row g-4 justify-content-center">
-                <?php foreach ($three_cards as $card): ?>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <a href="<?php echo htmlspecialchars($card['link']); ?>"
-                            class="card h-100 shadow-lg elegant-card text-decoration-none text-dark">
-                            <img src="<?php echo htmlspecialchars($card['image']); ?>"
-                                class="card-img-top rounded-top"
-                                alt="<?php echo htmlspecialchars($card['title']); ?>">
-                            <div class="card-body d-flex flex-column p-4">
-                                <span class="badge rounded-pill bg-secondary mb-2"
-                                    style="width: fit-content;">
-                                    <?php echo htmlspecialchars($card['category']); ?>
-                                </span>
-                                <h5 class="card-title fw-bold mb-2 line-clamp-2">
-                                    <?php echo htmlspecialchars($card['title']); ?>
-                                </h5>
-                                <p class="text-muted small mb-3">
-                                    <i data-lucide="calendar" style="width:14px;height:14px;"></i>
-                                    <?php echo htmlspecialchars($card['date']); ?>
-                                </p>
-                                <p class="card-text text-secondary flex-grow-1 line-clamp-3">
-                                    <?php echo htmlspecialchars($card['excerpt']); ?>
-                                </p>
-                                <span class="mt-auto text-primary small fw-semibold">
-                                    Lihat Detail
-                                    <i data-lucide="arrow-right" class="ms-1" style="width:14px;height:14px;"></i>
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                <?php endforeach; ?>
+    <?php if (!empty($three_cards)): ?>
+        <section class="py-5 bg-light-gray">
+            <div class="container">
+                <h3 class="fw-bold text-center mb-5 text-dark-blue">Wisata Pilihan Lainnya</h3>
+                <div class="row g-4 mb-4">
+                    <?php foreach ($three_cards as $card): ?>
+                        <div class="col-12 col-md-4">
+                            <a href="<?php echo htmlspecialchars($card['link']); ?>" class="card h-100 shadow-sm custom-card text-decoration-none text-dark border-0">
+                                <img src="<?php echo htmlspecialchars($card['image']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($card['title']); ?>" style="height: 200px; object-fit: cover;">
+                                <div class="card-body p-4 d-flex flex-column">
+                                    <span class="badge text-bg-warning mb-2 align-self-start small">
+                                        <?php echo htmlspecialchars($card['category']); ?>
+                                    </span>
+                                    <h5 class="card-title fw-bold mb-2 line-clamp-2">
+                                        <?php echo htmlspecialchars($card['title']); ?>
+                                    </h5>
+                                    <p class="card-text text-secondary flex-grow-1 small line-clamp-3">
+                                        <?php echo htmlspecialchars($card['excerpt']); ?>
+                                    </p>
+                                    <span class="mt-auto text-primary small fw-semibold">
+                                        Baca Selengkapnya
+                                        <i data-lucide="arrow-right" class="ms-1" style="width:14px;height:14px;"></i>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    <?php endif; ?>
 
-    <section class="pb-5">
-        <div class="container text-center">
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item">
-                        <a href="#" class="page-link">Previous</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item active">
-                        <a class="page-link" href="#" aria-current="page">2</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
-            </nav>
+    <?php if (!empty($three_more_cards)): ?>
+        <section class="py-5">
+            <div class="container">
+                <h3 class="fw-bold text-center mb-5 text-dark-blue">Rekomendasi Tambahan</h3>
+                <div class="row g-4 mb-4">
+                    <?php foreach ($three_more_cards as $card): ?>
+                        <div class="col-12 col-md-4">
+                            <a href="<?php echo htmlspecialchars($card['link']); ?>" class="card h-100 shadow-sm custom-card text-decoration-none text-dark border-0">
+                                <img src="<?php echo htmlspecialchars($card['image']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($card['title']); ?>" style="height: 200px; object-fit: cover;">
+                                <div class="card-body p-4 d-flex flex-column">
+                                    <span class="badge text-bg-success mb-2 align-self-start small">
+                                        <?php echo htmlspecialchars($card['category']); ?>
+                                    </span>
+                                    <h5 class="card-title fw-bold mb-2 line-clamp-2">
+                                        <?php echo htmlspecialchars($card['title']); ?>
+                                    </h5>
+                                    <p class="card-text text-secondary flex-grow-1 small line-clamp-3">
+                                        <?php echo htmlspecialchars($card['excerpt']); ?>
+                                    </p>
+                                    <span class="mt-auto text-primary small fw-semibold">
+                                        Baca Selengkapnya
+                                        <i data-lucide="arrow-right" class="ms-1" style="width:14px;height:14px;"></i>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </section>
+    <?php endif; ?>
+
+    <section>
+        <div class="container">
+            <?php if (!empty($all_wisata)): ?>
+                <div class="row g-4 mb-4">
+                    <?php foreach ($all_wisata as $wisata): ?>
+                        <div class="col-12 col-sm-6 col-lg-4">
+                            <a href="<?php echo htmlspecialchars($wisata['link']); ?>"
+                                class="card h-100 shadow-sm custom-card text-decoration-none text-dark border-0">
+                                <img src="<?php echo htmlspecialchars($wisata['image']); ?>"
+                                    class="card-img-top"
+                                    alt="<?php echo htmlspecialchars($wisata['title']); ?>"
+                                    style="height: 250px; object-fit: cover;">
+                                <div class="card-body p-4 d-flex flex-column">
+                                    <span class="badge text-bg-info mb-2 align-self-start small">
+                                        <?php echo htmlspecialchars($wisata['category']); ?>
+                                    </span>
+                                    <h5 class="card-title fw-bold mb-2 line-clamp-2">
+                                        <?php echo htmlspecialchars($wisata['title']); ?>
+                                    </h5>
+                                    <p class="text-muted small mb-3">
+                                        <i data-lucide="calendar" style="width:14px;height:14px;"></i>
+                                        <?php echo htmlspecialchars($wisata['date']); ?>
+                                    </p>
+                                    <p class="card-text text-secondary flex-grow-1 line-clamp-3">
+                                        <?php echo htmlspecialchars($wisata['excerpt']); ?>
+                                    </p>
+                                    <span class="mt-auto text-primary small fw-semibold">
+                                        Baca Selengkapnya
+                                        <i data-lucide="arrow-right" class="ms-1" style="width:14px;height:14px;"></i>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
+                            <a class="page-link" href="?page=<?php echo $page - 1; ?>" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                            <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
+                                <a class="page-link" href="?page=<?php echo $i; ?>">
+                                    <?php echo $i; ?>
+                                </a>
+                            </li>
+                        <?php endfor; ?>
+
+                        <li class="page-item <?php echo ($page >= $total_pages) ? 'disabled' : ''; ?>">
+                            <a class="page-link" href="?page=<?php echo $page + 1; ?>" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            <?php else: ?>
+            <?php endif; ?>
         </div>
     </section>
 
     <footer class="text-white text-center py-4">
         <div class="container">
-            <p class="small mb-0">
-                Hak Cipta ©2025 Teniga. Universitas Bumigora | Diciptakan oleh Julbedong
+            <p class="small mb-0">Hak Cipta © 2025 Pemerintah Desa Teniga. Semua hak dilindungi undang-undang. | Didukung Program Kosabangsa
+                <br>Universitas Bumigora | Dibuat oleh Ahmad Jul Hadi
             </p>
         </div>
     </footer>
 
     <script>
+        // Inisialisasi Lucide Icons
         lucide.createIcons();
 
-        // Fungsi untuk mengatur tinggi carousel agar responsif
-        function setCarouselHeight() {
-            let height;
-            if (window.innerWidth > 992) {
-                height = '450px';
-            } else if (window.innerWidth > 576) {
-                height = '300px';
-            } else {
-                height = '220px';
+        // Dropdown Mobile Toggle — Bisa buka & tutup kembali
+        document.querySelectorAll('.mobile-menu .dropdown-toggle').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                const submenu = btn.nextElementSibling;
+                const isOpen = submenu.classList.contains('show');
+
+                // Tutup semua submenu lain dulu
+                document.querySelectorAll('.mobile-menu .dropdown-menu.show').forEach(menu => {
+                    if (menu !== submenu) {
+                        menu.classList.remove('show');
+                    }
+                });
+                document.querySelectorAll('.mobile-menu .dropdown-toggle.show').forEach(toggle => {
+                    if (toggle !== btn) {
+                        toggle.classList.remove('show');
+                    }
+                });
+
+                // Toggle submenu yang diklik
+                submenu.classList.toggle('show', !isOpen);
+                btn.classList.toggle('show', !isOpen);
+            });
+        });
+
+        // LOGIKA MENU HAMBURGER UTAMA
+        (function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const openBtn = document.getElementById('mobile-menu-btn');
+            const closeBtn = document.getElementById('close-menu-btn');
+
+            function toggleMobileMenu() {
+                mobileMenu.classList.toggle('show');
+                document.body.classList.toggle('no-scroll');
             }
-            document.querySelectorAll('.carousel-img').forEach(img => {
-                img.style.height = height;
-            });
-        }
-        window.addEventListener('resize', setCarouselHeight);
-        window.onload = setCarouselHeight;
 
-        // Logika Dropdown dan Hover (TETAP SAMA)
-        (function() {
-            const LONGPRESS_MS = 400;
-
-            document.querySelectorAll('.dropdown').forEach(drop => {
-                const toggle = drop.querySelector('.dropdown-toggle');
-                if (!toggle) return;
-
-                if (!toggle.dataset.href) {
-                    const firstItem = drop.querySelector('.dropdown-item[href]');
-                    if (firstItem) toggle.dataset.href = firstItem.getAttribute('href');
-                }
-
-                let pressTimer = null;
-                const startPress = (e) => {
-                    if (!toggle.dataset.href) return;
-                    pressTimer = Date.now();
-                };
-
-                const endPress = (e) => {
-                    if (!toggle.dataset.href || pressTimer === null) return;
-                    const dur = Date.now() - pressTimer;
-                    pressTimer = null;
-                    if (dur >= LONGPRESS_MS) {
-                        window.location.href = toggle.dataset.href;
-                    }
-                };
-
-                toggle.addEventListener('touchstart', startPress, {
-                    passive: true
-                });
-                toggle.addEventListener('mousedown', startPress);
-                toggle.addEventListener('touchend', endPress);
-                toggle.addEventListener('mouseup', endPress);
-
-                toggle.addEventListener('click', function(e) {
-                    const href = this.dataset.href;
-                    const isOpen = drop.classList.contains('show');
-                    if (href && isOpen) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        window.location.href = href;
-                    }
-                });
-            });
-        })();
-
-        (function() {
-            if ('ontouchstart' in window) return;
-            if (window.matchMedia && !window.matchMedia('(hover: hover)').matches) return;
-
-            document.querySelectorAll('.dropdown').forEach(drop => {
-                const toggle = drop.querySelector('.dropdown-toggle');
-                if (!toggle) return;
-
-                let bs = bootstrap.Dropdown.getOrCreateInstance(toggle);
-                let hideTimer = null;
-
-                drop.addEventListener('mouseenter', () => {
-                    if (hideTimer) {
-                        clearTimeout(hideTimer);
-                        hideTimer = null;
-                    }
-                    bs.show();
-                });
-
-                drop.addEventListener('mouseleave', () => {
-                    hideTimer = setTimeout(() => {
-                        bs.hide();
-                    }, 50);
-                });
-            });
+            openBtn.addEventListener('click', toggleMobileMenu);
+            closeBtn.addEventListener('click', toggleMobileMenu);
         })();
     </script>
 </body>

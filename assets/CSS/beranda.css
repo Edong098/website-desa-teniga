@@ -14,6 +14,9 @@ body {
   color: #333;
 }
 
+/* ==================================== */
+/* HERO SECTION & OVERLAYS */
+/* ==================================== */
 .hero-background {
   background: url("../img/IMG_6641.jpg") no-repeat center center / cover;
   min-height: 100vh;
@@ -35,14 +38,32 @@ body {
   text-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
 }
 
-/* Navbar */
+/* ==================================== */
+/* NAVBAR & HEADER (Base/Shared Style) */
+/* ==================================== */
+
+/* Mengurangi padding vertikal di container navigasi */
+.container.position-relative.py-3 {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+/* Penyesuaian untuk Navbar agar logo dan menu sebaris */
+.navbar {
+  padding: 0 !important; /* Hapus padding default navbar Bootstrap */
+}
+
+/* Penyesuaian Link Navigasi */
 .nav-link {
   position: relative;
   transition: color 0.18s ease-in-out;
-  padding-bottom: 6px;
+  /* Padding vertikal link navigasi dikurangi agar lebih ringkas */
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
   font-family: "Poppins", sans-serif;
   color: inherit;
   display: inline-block;
+  margin: 0 !important; /* Hapus margin default */
 }
 
 .nav-link,
@@ -69,7 +90,8 @@ body {
   content: "";
   position: absolute;
   left: 50%;
-  bottom: -4px;
+  /* Posisikan garis bawah di bawah teks */
+  bottom: 0px;
   transform: translateX(-50%) scaleX(0);
   width: 100%;
   height: 2px;
@@ -131,7 +153,8 @@ body {
   padding: 10px 16px;
   font-size: 14px;
   color: #333;
-  transition: background 0.18s, color 0.18s;
+  transition: background 0.18s;
+  color: 0.18s;
   border-radius: 6px;
 }
 
@@ -221,40 +244,147 @@ footer a {
   z-index: 15;
 }
 
-/* --- MEDIA QUERY: TABLET --- */
-/* --- MEDIA QUERY: DESKTOP --- */
-@media (min-width: 1200px) {
-  /* Hero section: agar tampilan elegan di layar besar */
-  .hero-section {
-    padding: 6rem 10rem;
+/* ==================================== */
+/* HAMBURGER MENU STYLES (for Mobile/Tablet) */
+/* ==================================== */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100%;
+  background-color: #fff;
+  color: #333;
+  padding: 20px;
+  box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 3000;
+  overflow-y: auto;
+}
+
+.mobile-menu.show {
+  transform: translateX(0);
+}
+
+.mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.mobile-nav-link {
+  display: block;
+  padding: 10px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.mobile-nav-link:hover {
+  color: var(--color-primary);
+  background-color: #f8f8f8;
+}
+
+.mobile-dropdown-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.mobile-dropdown-menu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  padding-left: 15px;
+}
+
+.mobile-dropdown-menu.open {
+  max-height: 300px;
+}
+
+.mobile-dropdown-item {
+  display: block;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #555;
+  text-decoration: none;
+}
+
+.mobile-dropdown-item:hover {
+  color: var(--color-primary);
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+/* ==================================== */
+/* MEDIA QUERY: DESKTOP (Min-width 992px) */
+/* ==================================== */
+@media (min-width: 996px) {
+  .container.position-relative.py-3 {
+    display: block;
+    padding-top: 0.1rem !important;
+    padding-bottom: 0.2rem !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  /* HEADER BLOCK (LOGO + TEXT): Rata Kiri dengan margin khusus */
+  #navbar-header {
+    margin-left: 12rem !important;
+    margin-top: 1rem !important;
+    /* Memastikan logo dan teks rata kiri */
+    justify-content: flex-start !important;
+    transform: none !important;
+    width: 100%;
+  }
+
+  /* NAVIGASI UTAMA: Rata Tengah di bawah header */
+  #main-navigation {
+    margin-top: 0.2rem !important;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    padding: 0 15px;
   }
 
-  .hero-section .display-5 {
-    font-size: 3.5rem;
-    line-height: 1.2;
-  }
-
-  .hero-section p {
-    font-size: 1.2rem;
-    max-width: 600px;
-  }
-
-  .hero-section .btn-primary {
-    padding: 1rem 2.5rem;
-    font-size: 1.1rem;
-  }
-
-  /* Navbar spacing lebih longgar di layar besar */
-  .navbar {
-    padding: 1.2rem 5rem;
-  }
-
+  /* Ukuran font link navigasi dikecilkan */
   .nav-link {
-    font-size: 1.05rem;
-    margin: 0 0.8rem;
+    font-size: 0.95rem;
+  }
+
+  /* Jarak antar item menu dibuat lebih rapat */
+  .nav-link.px-3 {
+    padding-left: 0.8rem !important;
+    padding-right: 0.8rem !important;
+  }
+
+  /* Ukuran teks logo di desktop dikecilkan */
+  .d-flex.flex-column.ms-1 span {
+    font-size: 0.9rem;
+    line-height: 1.1;
+  }
+
+  /* Ukuran logo di desktop dikecilkan */
+  .d-flex.align-items-center.text-white.text-decoration-none img {
+    height: 38px !important;
   }
 
   /* Dropdown agar pas di bawah menu utama */
@@ -286,92 +416,149 @@ footer a {
   .container {
     max-width: 1300px;
   }
-}
 
-@media (max-width: 992px) {
-  /* Navbar padding dan teks mengecil */
-  .nav-link {
-    padding: 8px 12px;
-    font-size: 0.95rem;
+  /* Hero section: agar tampilan elegan di layar besar */
+  .hero-section {
+    padding: 6rem 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  /* Dropdown di tablet turun sedikit lebih ke bawah */
-  .dropdown-menu {
-    transform: translateX(-50%) translateY(5px);
-    min-width: 160px;
-  }
-
-  /* Hero section text scaling */
   .hero-section .display-5 {
-    font-size: 2.2rem;
+    font-size: 3.5rem;
     line-height: 1.2;
   }
 
   .hero-section p {
-    font-size: 1rem;
+    font-size: 1.2rem;
+    max-width: 600px;
   }
 
-  /* Tombol hero lebih kecil */
   .hero-section .btn-primary {
-    padding: 0.8rem 1.5rem;
-    font-size: 0.95rem;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
   }
 
-  footer {
-    text-align: center;
-    font-size: 0.9rem;
+  /* Menghapus aturan lama yang tidak diperlukan lagi atau bentrok */
+  #main-header-nav {
+    margin-left: initial;
   }
 }
 
-/* --- MEDIA QUERY: MOBILE --- */
-@media (max-width: 576px) {
-  /* Hero background agar fokus ke tengah */
-  .hero-background {
-    background-position: center top;
-    min-height: 90vh;
+/* ==================================== */
+/* MEDIA QUERY: TABLET (768px - 991px) */
+/* ==================================== */
+@media (min-width: 768px) and (max-width: 991px) {
+  /* PERBAIKAN: Tambahkan padding untuk menjamin jarak antar tombol dan tepi layar */
+  #navbar-header {
+    padding: 0 1rem; /* Padding horizontal untuk memberi jarak ke tepi */
+    margin-top: 0.5rem; /* Tambah jarak ke bawah */
   }
 
-  .hero-section {
-    flex-direction: column;
-    text-align: center;
-    padding: 0 1rem;
+  /* Pastikan Logo terlihat jelas di kanan */
+  a.d-flex.align-items-center {
+    padding-left: 0.5rem;
+    padding-right: 0;
   }
 
-  .hero-section .display-5 {
-    font-size: 1.6rem;
+  /* Warna icon hamburger */
+  .navbar-toggler i {
+    color: #fff !important;
+    font-size: 1.5rem;
   }
 
-  .hero-section p {
+  /* Memastikan tombol toggler sendiri juga terlihat */
+  .navbar-toggler {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.4rem;
+  }
+
+  /* Pindahkan hero text sedikit ke atas agar tidak terlalu rendah */
+  .hero-text {
+    top: 60% !important;
+    padding: 0 15px;
+  }
+
+  .hero-text .display-5 {
+    font-size: 2.5rem;
+  }
+
+  .hero-text p {
+    font-size: 1.1rem;
+  }
+}
+
+/* ==================================== */
+/* MEDIA QUERY: MOBILE (max-width: 767px) */
+/* ==================================== */
+@media (max-width: 767px) {
+  /* PERBAIKAN: Tambahkan padding untuk menjamin jarak antar tombol dan tepi layar */
+  #navbar-header {
+    padding: 0 1rem; /* Padding horizontal untuk memberi jarak ke tepi */
+    margin-top: 0.5rem; /* Tambah jarak ke bawah */
+  }
+
+  /* Kecilkan logo di HP dan pastikan tata letak flex-nya benar */
+  a.d-flex.align-items-center {
+    /* Ini adalah elemen <a> yang membungkus logo */
+    /* Pastikan elemen ini tidak memiliki lebar penuh yang memaksa elemen lain ke bawah */
+    flex-shrink: 0;
+    padding-left: 0.5rem;
+    padding-right: 0;
+  }
+
+  /* Kecilkan gambar logo di HP */
+  a.d-flex.align-items-center img {
+    height: 32px !important;
+  }
+
+  /* Kecilkan teks di bawah logo */
+  .d-flex.flex-column.ms-1 span {
+    font-size: 0.75rem !important;
+    line-height: 1.1;
+  }
+
+  /* Warna icon hamburger */
+  .navbar-toggler i {
+    color: #fff !important;
+    font-size: 1.4rem;
+  }
+
+  /* Memastikan tombol toggler sendiri juga terlihat */
+  .navbar-toggler {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.3rem;
+  }
+
+  /* Hero Text: Lebih ramping di HP */
+  .hero-text {
+    top: 60% !important;
+    padding: 0 15px;
+  }
+
+  .hero-text .display-5 {
+    font-size: 2rem;
+  }
+
+  .hero-text p {
+    font-size: 1rem;
+  }
+
+  .hero-text .btn-primary {
+    padding: 0.7rem 1.4rem;
     font-size: 0.9rem;
-    margin-bottom: 1rem;
   }
 
-  /* Tombol lebih ramping */
-  .hero-section .btn-primary {
-    padding: 0.7rem 1.3rem;
-    font-size: 0.85rem;
+  /* Sesuaikan card di mobile */
+  .card img {
+    height: 10rem !important;
   }
 
-  /* Navbar teks lebih kecil dan mudah diklik */
-  .nav-link {
-    font-size: 0.9rem;
-    padding: 6px 10px;
-  }
-
-  /* Dropdown di HP tampil penuh (agar mudah diklik) */
-  .dropdown-menu {
-    left: 0;
-    right: 0;
-    transform: none;
-    min-width: 100%;
-    box-shadow: none;
-    border-radius: 0;
-    border: none;
-  }
-
-  /* Footer spacing */
+  /* Footer di mobile */
   footer {
-    padding: 30px 10px;
-    font-size: 0.85rem;
+    padding: 40px 15px;
   }
 }
