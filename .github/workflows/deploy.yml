@@ -18,7 +18,7 @@ jobs:
         with:
           host: 148.230.100.88
           username: root
-          key: ${{ secrets.VPS_SSH_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/desawisatateniga.com
             git pull origin main
