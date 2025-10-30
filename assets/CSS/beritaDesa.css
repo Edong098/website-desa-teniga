@@ -305,6 +305,16 @@ body.no-scroll {
     border-bottom: none;
   }
 }
+
+footer {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+footer a {
+  color: #fff;
+}
+
 /* GAYA MENU HAMBURGER (MOBILE) */
 .mobile-menu {
   position: fixed;

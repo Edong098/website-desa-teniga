@@ -67,6 +67,7 @@ include "../database/dbConnect.php";
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="petaDropdown">
                         <li><a class="dropdown-item" href="../Halaman/peta/petaDesa.php">Peta Desa (UMUM)</a></li>
+                        <li><a class="dropdown-item" href="#">Peta UMKM</a></li>
                     </ul>
                 </div>
                 <a href="../Halaman/wisata.php" class="nav-link text-white text-decoration-none px-3"><span class="nav-text">OBJEK WISATA</span></a>

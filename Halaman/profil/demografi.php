@@ -134,6 +134,7 @@ if ($conn) {
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="petaDropdown">
                         <li><a class="dropdown-item" href="../../Halaman/peta/petaDesa.php">Peta Desa (Umum)</a></li>
+                        <li><a class="dropdown-item" href="#">Peta UMKM</a></li>
                     </ul>
                 </div>
 

@@ -226,7 +226,7 @@ if ($conn) {
                 </button>
                 <div id="petaMenu" class="collapse ps-3">
                     <a class="dropdown-item py-2" href="../Halaman/peta/petaDesa.php">Peta Desa (Umum)</a>
-                    <a class="dropdown-item py-2" href="#">Peta UMKM</a>
+                    <a class="dropdown-item" href="#">Peta UMKM</a>
                 </div>
             </div>
 
@@ -395,7 +395,7 @@ if ($conn) {
         </div>
     </section>
 
-    <footer class="bg-primary text-white text-center py-4">
+    <footer class="text-white text-center py-4">
         <div class="container">
             <p class="small mb-0">Hak Cipta © 2025 Pemerintah Desa Teniga. Semua hak dilindungi undang-undang. | Didukung Program Kosabangsa
                 <br>Universitas Bumigora | Dibuat oleh Ahmad Jul Hadi
