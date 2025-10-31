@@ -98,6 +98,7 @@ include "../database/dbConnect.php";
             </nav>
         </div>
 
+        <!-- mobile -->
         <div class="mobile-menu" id="mobile-menu">
             <div class="mobile-menu-header">
                 <h5 class="fw-bold mb-0">Menu Navigasi</h5>
@@ -111,21 +112,8 @@ include "../database/dbConnect.php";
                 </button>
             </div>
 
-            <a href="../Halaman/Beranda.php" class="mobile-nav-link">BERANDA</a>
-            <a href="../Halaman/berita.php" class="mobile-nav-link">KABAR DESA</a>
-            <a href="../Halaman/pelayanan.php" class="mobile-nav-link">PELAYANAN</a>
-
-            <div class="mobile-dropdown-toggle" data-target="profil">
-                <span>PROFIL DESA</span>
-                <i data-lucide="chevron-down" class="dropdown-chevron"></i>
-            </div>
-            <div class="mobile-dropdown-menu" id="mobile-dropdown-profil">
-                <a class="mobile-dropdown-item" href="../Halaman/profil/lembaga.php">Lembaga Desa</a>
-                <a
-                    class="mobile-dropdown-item"
-                    href="../Halaman/profil/sejarahDesa.php">Sejarah Desa</a>
-                <a class="mobile-dropdown-item" href="../Halaman/profil/Demografi.php">Demografi Desa</a>
-            </div>
+            <a href="../Halaman/Beranda.php" class="mobile-nav-link active">BERANDA</a>
+            <a href="../Halaman/pakettour.php" class="mobile-nav-link">PAKET TOUR</a>
 
             <div class="mobile-dropdown-toggle" data-target="peta">
                 <span>PETA INTERAKTIF</span>
@@ -133,6 +121,7 @@ include "../database/dbConnect.php";
             </div>
             <div class="mobile-dropdown-menu" id="mobile-dropdown-peta">
                 <a class="mobile-dropdown-item" href="../Halaman/peta/petaDesa.php">Peta Desa (UMUM)</a>
+                <a class="dropdown-item" href="#">Peta UMKM</a>
             </div>
 
             <a href="../Halaman/wisata.php" class="mobile-nav-link">OBJEK WISATA</a>

@@ -113,9 +113,10 @@ if ($conn) {
                 </button>
             </div>
 
+            <!-- mobile -->
             <nav id="main-navigation" class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-4 py-1">
                 <a href="../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
-                <a href="../Halaman/berita.php" class="nav-link active text-decoration-none px-3"><span class="nav-text">TOUR PACKAGES</span></a>
+                <a href="../Halaman/pakettour.php" class="nav-link active text-decoration-none px-3"><span class="nav-text">TOUR PACKAGES</span></a>
 
                 <div class="dropdown nav-dropdown">
                     <a class="nav-link dropdown-toggle text-black text-decoration-none px-3" href="#" id="petaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -141,7 +142,7 @@ if ($conn) {
             </div>
 
             <a href="../Halaman/Beranda.php" class="nav-link text-black py-2"><span class="nav-text">BERANDA</span></a>
-            <a href="../Halaman/berita.php" class="nav-link text-black py-2"><span class="nav-text">TOUR PACKAGES</span></a>
+            <a href="../Halaman/pakettour.php" class="nav-link active text-black py-2"><span class="nav-text">TOUR PACKAGES</span></a>
             <div class="dropdown w-100">
                 <button class="dropdown-toggle w-100 text-start bg-transparent border-0 py-2 px-0 fw-bold" data-bs-toggle="collapse">
                     PETA INTERAKTIF
