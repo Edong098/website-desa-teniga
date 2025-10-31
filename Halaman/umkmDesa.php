@@ -2,63 +2,46 @@
 include "../database/dbConnect.php";
 
 $conn = $konek;
-$all_umkm = [];
-$table_name = "tb_umkm";
-$id_column = 'id_umkm';
-$link_base = 'detailUmkm.php?id=';
-$limit = 3;
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$page = max(1, $page);
 
 if ($conn) {
-    $count_query = "SELECT COUNT(*) AS total FROM $table_name";
-    $total_result = $conn->query($count_query);
-    $total_records = $total_result ? $total_result->fetch_assoc()['total'] : 0;
-    $total_pages = ceil($total_records / $limit);
-    $total_pages = max(1, $total_pages);
-    $offset = ($page - 1) * $limit;
+    // Ambil semua data UMKM dari tabel tb_umkm
+    $all_umkm = [];
+    $query = "SELECT * FROM tb_umkm ORDER BY tanggal_input DESC";
+    $result = $conn->query($query);
 
-    $data_query = "SELECT * FROM $table_name LIMIT ? OFFSET ?";
-    $stmt = $conn->prepare($data_query);
+    // KODE BARU YANG BENAR:
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
 
-    if ($stmt) {
-        $stmt->bind_param("ii", $limit, $offset);
-        $stmt->execute();
-        $all_umkm_result = $stmt->get_result();
+            // Gambar produk (Logika ini sebenarnya tidak perlu di loop ini, tapi tidak masalah)
+            $image_path = htmlspecialchars($row['gambar_produk'] ?? '');
+            $image = !empty($image_path)
+                ? "../uploads/umkm/" . $image_path
+                : "https://placehold.co/800x400/a2d2ff/000000?text=Produk+UMKM+Teniga";
 
-        if ($all_umkm_result) {
-            while ($row = $all_umkm_result->fetch_assoc()) {
+            // Format harga (Logika ini juga tidak perlu di loop ini)
+            $harga_produk = $row['harga_produk'] ?? 0;
+            $harga_display = 'Rp ' . number_format($harga_produk, 0, ',', '.');
 
-                $image_path = htmlspecialchars($row['gambar_produk'] ?? '');
-                $image = !empty($image_path)
-                    ? "../uploads/umkm/" . $image_path
-                    : "https://placehold.co/800x400/a2d2ff/000000?text=Produk+UMKM+Lebar";
-
-                $harga_produk = $row['harga_produk'] ?? 0;
-                $harga_display = 'Rp ' . number_format($harga_produk, 0, ',', '.');
-
-                $kontak_clean = preg_replace('/[^0-9]/', '', $row['kontak_umkm'] ?? '');
-                if (!empty($kontak_clean) && substr($kontak_clean, 0, 1) === '0') {
-                    $kontak_clean = '62' . substr($kontak_clean, 1);
-                }
-
-                $message = "Halo, saya tertarik dengan produk *{$row['produk']}* dari *{$row['nama_umkm']}* yang ada di website desa. Apakah produk ini masih tersedia?";
-                $kontak_link = "https://wa.me/" . $kontak_clean . "?text=" . urlencode($message);
-
-                $all_umkm[] = [
-                    'nama_umkm' => htmlspecialchars($row['nama_umkm'] ?? 'Nama UMKM'),
-                    'produk' => htmlspecialchars($row['produk'] ?? 'Produk Unggulan'),
-                    'harga' => $harga_display,
-                    'kontak' => htmlspecialchars($row['kontak_umkm'] ?? 'Kontak UMKM'),
-                    'kontak_link' => htmlspecialchars($kontak_link),
-                    'image' => $image,
-                    'link' => htmlspecialchars($link_base . ($row[$id_column] ?? '')),
-                    'category' => strtoupper(htmlspecialchars(explode(' ', $row['nama_umkm'])[0] ?? 'UMKM')),
-                    'alamat' => htmlspecialchars($row['alamat_umkm'] ?? 'Alamat Tidak Tersedia')
-                ];
+            // Format kontak WhatsApp (Logika ini juga tidak perlu di loop ini)
+            $kontak_clean = preg_replace('/[^0-9]/', '', $row['kontak_umkm'] ?? '');
+            if (!empty($kontak_clean) && substr($kontak_clean, 0, 1) === '0') {
+                $kontak_clean = '62' . substr($kontak_clean, 1);
             }
+
+            $message = "Halo, saya tertarik dengan produk *{$row['produk']}* dari *{$row['nama_umkm']}* yang ada di website Desa Wisata Teniga. Apakah produk ini masih tersedia?";
+            $kontak_link = "https://wa.me/" . $kontak_clean . "?text=" . urlencode($message);
+
+            // Susun data ke array $all_umkm - LAKUKAN DI SINI!
+            $all_umkm[] = [
+                'nama_umkm' => htmlspecialchars($row['nama_umkm'] ?? ''),
+                'produk' => htmlspecialchars($row['produk'] ?? ''),
+                'harga_produk' => $harga_produk,
+                'kontak_umkm' => htmlspecialchars($row['kontak_umkm'] ?? ''),
+                'alamat_umkm' => htmlspecialchars($row['alamat_umkm'] ?? ''),
+                'gambar_produk' => htmlspecialchars($row['gambar_produk'] ?? '')
+            ];
         }
-        $stmt->close();
     }
 }
 ?>
@@ -85,11 +68,12 @@ if ($conn) {
             <div class="d-flex justify-content-between align-items-center w-100 position-relative"
                 style="margin-left: 10.5%; transform: translateY(8px); margin-bottom: -9px;">
                 <a href="../Halaman/Beranda.php" class="d-flex align-items-center text-black text-decoration-none ms-3 ms-md-0">
-                    <img src="../assets/img/CDR_LOGO_DESA.png"
+                    <img src="../assets/img/logo.png"
                         alt="Logo Desa Teniga"
                         style="height:40px; margin-bottom: 2px;">
-                    <div class="d-flex flex-column ms-2">
-                        <span class="fs-6 fw-bold">DESA TENIGA</span>
+                    <div class="d-flex flex-column ms-2" class="d-flex flex-column ms-1"
+                        style="font-family: Paprika, system-ui">
+                        <span class="fs-6 fw-bold">DESA WISATA TENIGA</span>
                         <span class="small fw-bold">TANJUNG LOMBOK UTARA</span>
                     </div>
                 </a>
@@ -99,25 +83,10 @@ if ($conn) {
                 </button>
             </div>
 
-
             <!-- Baris Navigasi -->
             <nav id="main-navigation" class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-4 py-1">
                 <a href="../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
-                <a href="../Halaman/berita.php" class="nav-link text-decoration-none px-3"><span class="nav-text">KABAR DESA</span></a>
-                <a href="../Halaman/pelayanan.php" class="nav-link text-decoration-none px-3"><span class="nav-text">PELAYANAN</span></a>
-
-                <!-- PROFIL DESA -->
-                <div class="dropdown nav-dropdown">
-                    <a class="nav-link dropdown-toggle text-black text-decoration-none px-3" href="#" id="profilDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="nav-text me-1">PROFIL DESA</span>
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="profilDropdown">
-                        <li><a class="dropdown-item" href="../Halaman/profil/lembaga.php">Lembaga Desa</a></li>
-                        <li><a class="dropdown-item" href="../Halaman/profil/sejarahDesa.php">Sejarah Desa</a></li>
-                        <li><a class="dropdown-item" href="../Halaman/profil/Demografi.php">Demografi Desa</a></li>
-                    </ul>
-                </div>
-
+                <a href="../Halaman/pakettour.php" class="nav-link text-decoration-none px-3"><span class="nav-text">TOUR PACKAGES</span></a>
                 <!-- PETA INTERAKTIF -->
                 <div class="dropdown nav-dropdown">
                     <a class="nav-link dropdown-toggle text-black text-decoration-none px-3" href="#" id="petaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -145,20 +114,7 @@ if ($conn) {
             </div>
 
             <a href="../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
-            <a href="../Halaman/berita.php" class="nav-link text-decoration-none px-3"><span class="nav-text">KABAR DESA</span></a>
-            <a href="../Halaman/pelayanan.php" class="nav-link text-decoration-none px-3"><span class="nav-text">PELAYANAN</span></a>
-
-            <!-- PROFIL DESA -->
-            <div class="dropdown nav-dropdown">
-                <a class="nav-link dropdown-toggle text-black text-decoration-none px-3" href="#" id="profilDropdown" aria-expanded="false">
-                    <span class="nav-text me-1">PROFIL DESA</span>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="profilDropdown">
-                    <li><a class="dropdown-item" href="../Halaman/profil/lembaga.php">Lembaga Desa</a></li>
-                    <li><a class="dropdown-item" href="../Halaman/profil/sejarahDesa.php">Sejarah Desa</a></li>
-                    <li><a class="dropdown-item" href="../Halaman/profil/Demografi.php">Demografi Desa</a></li>
-                </ul>
-            </div>
+            <a href="../Halaman/pakettour.php" class="nav-link text-decoration-none px-3"><span class="nav-text">TOUR PACKAGES</span></a>
 
             <!-- PETA INTERAKTIF -->
             <div class="dropdown nav-dropdown">
@@ -180,12 +136,13 @@ if ($conn) {
 
     <section class="pt-5 pb-4 bg-white">
         <div class="container text-center">
-            <h2 class="display-6 fw-bold font-poppins text-dark-blue mb-2">Daftar Produk UMKM Desa</h2>
-            <p class="fs-5 text-muted">Dukung ekonomi lokal! Temukan berbagai produk unggulan dari UMKM di desa kami.</p>
+            <h2 class="display-6 fw-bold font-poppins text-dark-blue mb-2">Discover Banana Delights in Desa Wisata Teniga</h2>
+            <p class="fs-5 text-muted">Temukan berbagai olahan pisang khas Teniga — dari pisang segar alami hingga pisang sale manis dan gurih, hasil karya tangan kreatif masyarakat desa!</p>
             <hr class="w-25 mx-auto">
         </div>
     </section>
 
+    <!-- main -->
     <section class="py-5 bg-white">
         <div class="container">
             <?php if (!empty($all_umkm)): ?>
@@ -194,64 +151,47 @@ if ($conn) {
                         <div class="col-12 col-sm-6 col-lg-4 d-flex align-items-stretch">
                             <div class="card shadow umkm-card text-dark new-design w-100">
                                 <div class="card-image-wrapper position-relative">
-                                    <img src="<?php echo $card['image']; ?>"
+                                    <img src="<?php echo '../uploads/umkm/' . htmlspecialchars($card['gambar_produk']); ?>"
                                         class="card-img-top rounded-top"
-                                        alt="<?php echo $card['produk']; ?>">
+                                        alt="<?php echo htmlspecialchars($card['produk']); ?>">
 
                                     <div class="card-overlay-text p-3">
-                                        <span class="badge rounded-pill umkm-badge mb-2 fw-medium">
-                                            <?php echo $card['category']; ?>
-                                        </span>
+                                        <span class="badge rounded-pill umkm-badge mb-2 fw-medium">Produk Pisang</span>
 
                                         <h5 class="card-title-overlay fw-bold mb-1 line-clamp-2 text-white">
-                                            <?php
-                                            $produk_text = $card['produk'];
-                                            if (strlen($produk_text) < 25) {
-                                                $produk_text = $produk_text . "<br>" . "&nbsp;";
-                                            }
-                                            echo $produk_text;
-                                            ?>
+                                            <?php echo htmlspecialchars($card['produk']); ?>
                                         </h5>
                                     </div>
                                 </div>
 
                                 <div class="card-body d-flex flex-column p-4">
-
-                                    <!-- 🔹 Tambahkan Nama UMKM di atas harga -->
-                                    <h5 class="card-title mb-2 fw-bold text-primary">
-                                        <?php echo $card['nama_umkm']; ?>
+                                    <h5 class="card-title mb-2 fw-bold text-black">
+                                        <?php echo htmlspecialchars($card['nama_umkm']); ?>
                                     </h5>
 
-                                    <!-- 🔹 Harga Produk -->
                                     <h6 class="card-subtitle mb-3 fw-semibold text-dark">
-                                        <?php echo $card['harga']; ?>
+                                        Rp <?php echo number_format($card['harga_produk']); ?>
                                     </h6>
 
                                     <div class="card-text text-secondary small flex-grow-1 mb-3">
                                         <div class="d-flex align-items-start mb-1">
                                             <i data-lucide="building" style="width:18px;height:18px; margin-top: 3px;"></i>
                                             <span class="ms-2 fw-semibold line-clamp-1">
-                                                <?php echo $card['nama_umkm']; ?>
+                                                <?php echo htmlspecialchars($card['nama_umkm']); ?>
                                             </span>
                                         </div>
 
                                         <div class="d-flex align-items-start">
                                             <i data-lucide="map-pin" style="width:18px;height:18px; margin-top: 3px;"></i>
                                             <span class="ms-2 text-wrap line-clamp-2">
-                                                <?php
-                                                $alamat_text = $card['alamat'];
-                                                if (strlen($alamat_text) < 20) {
-                                                    $alamat_text = $alamat_text . "<br>" . "&nbsp;";
-                                                }
-                                                echo $alamat_text;
-                                                ?>
+                                                <?php echo htmlspecialchars($card['alamat_umkm']); ?>
                                             </span>
                                         </div>
                                     </div>
 
-                                    <a href="<?php echo $card['kontak_link']; ?>"
+                                    <a href="https://wa.me/<?php echo preg_replace('/[^0-9]/', '', $card['kontak_umkm']); ?>?text=<?php echo urlencode('Halo, saya ingin pesan ' . $card['produk']); ?>"
                                         target="_blank"
-                                        class="mt-auto wa-button">
+                                        class="mt-auto wa-button btn-warning w-100 fw-semibold btn-sm rounded-pill">
                                         <i data-lucide="whatsapp" class="me-1" style="width:20px;height:20px;"></i>
                                         Hubungi Sekarang
                                     </a>
@@ -260,69 +200,68 @@ if ($conn) {
                         </div>
                     <?php endforeach; ?>
                 </div>
-
-                <div class="mt-5">
-                    <?php if ($total_pages > 1): ?>
-                        <nav aria-label="Page navigation" class="modern-pagination">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
-                                    <a class="page-link" href="?page=<?php echo $page - 1; ?>" aria-label="Previous">
-                                        <i data-lucide="chevron-left" style="width:18px;height:18px;"></i>
-                                    </a>
-                                </li>
-
-                                <?php
-                                $start_page = max(1, $page - 2);
-                                $end_page = min($total_pages, $page + 2);
-
-                                if ($start_page > 1) {
-                                    echo '<li class="page-item"><a class="page-link" href="?page=1">1</a></li>';
-                                    if ($start_page > 2) {
-                                        echo '<li class="page-item disabled"><a class="page-link">...</a></li>';
-                                    }
-                                }
-
-                                for ($i = $start_page; $i <= $end_page; $i++): ?>
-                                    <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
-                                        <a class="page-link" href="?page=<?php echo $i; ?>">
-                                            <?php echo $i; ?>
-                                        </a>
-                                    </li>
-                                <?php endfor;
-
-                                if ($end_page < $total_pages) {
-                                    if ($end_page < $total_pages - 1) {
-                                        echo '<li class="page-item disabled"><a class="page-link">...</a></li>';
-                                    }
-                                    echo '<li class="page-item"><a class="page-link" href="?page=' . $total_pages . '">' . $total_pages . '</a></li>';
-                                }
-                                ?>
-
-                                <li class="page-item <?php echo ($page >= $total_pages) ? 'disabled' : ''; ?>">
-                                    <a class="page-link" href="?page=<?php echo $page + 1; ?>" aria-label="Next">
-                                        <i data-lucide="chevron-right" style="width:18px;height:18px;"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    <?php endif; ?>
-                </div>
-            <?php else: ?>
-                <div class="alert alert-info text-center shadow-sm">
-                    Saat ini belum ada data UMKM yang tersedia.
-                </div>
             <?php endif; ?>
         </div>
     </section>
 
-
-    <footer class="text-white text-center py-4">
+    <!-- footer -->
+    <footer class="footer-modern py-5 bg-warning">
         <div class="container">
-            <p class="small mb-0">Hak Cipta © 2025 Pemerintah Desa Teniga. Semua hak dilindungi undang-undang. | Didukung Program Kosabangsa
-                <br>Universitas Bumigora | Dibuat oleh Ahmad Jul Hadi
-            </p>
+            <div class="row g-3">
+                <!-- Left Column: Logo & Subscribe -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-brand mb-4">
+                        <img
+                            src="../assets/img/logo.png"
+                            alt="Logo Desa Teniga"
+                            class="footer-logo mb-3" />
+                        <h4 class="text-black fw-bold mb-1">Desa Wisata Teniga</h4>
+                        <p class="text-black-50 mb-4">
+                            Experience The Nature and The Life of Local People in Desa Wisata
+                            Teniga.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Middle Column: Information -->
+                <div class="col-lg-4 col-md-6 text-lg-start text-center">
+                    <h5 class="text-black fw-bold mb-3">Information</h5>
+                    <ul class="footer-links list-unstyled mb-0">
+                        <li><a href="#" class="text-black-50 text-decoration-none d-block mb-2">About</a></li>
+                        <li><a href="#" class="text-black-50 text-decoration-none d-block mb-2">Tour Packages</a></li>
+                        <li><a href="#" class="text-black-50 text-decoration-none d-block">Events & Programs</a></li>
+                    </ul>
+                </div>
+
+                <!-- Right Column: Contact Us -->
+                <div class="col-lg-4 col-md-12 text-lg-start text-center">
+                    <h5 class="text-black fw-bold mb-3">Contact Us</h5>
+                    <div class="footer-contact d-inline-block text-start">
+                        <div class="d-flex align-items-center mb-2 justify-content-lg-start justify-content-center">
+                            <i data-lucide="phone" class="text-black me-2" style="width: 18px; height: 18px;"></i>
+                            <a href="tel:+6287822618933" class="text-black-50 text-decoration-none">
+                                +62 878-2261-8933
+                            </a>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-lg-start justify-content-center">
+                            <i data-lucide="mail" class="text-black me-2" style="width: 18px; height: 18px;"></i>
+                            <a href="mailto:desateniga@gmail.com" class="text-black-50 text-decoration-none">
+                                desateniga@gmail.com
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-bottom text-center mt-5 pt-4">
+                <p class="text-black-50 small mb-0">
+                    Copyright 2025 © Pokdarwis Teniga x Universitas Bumigora
+                </p>
+            </div>
         </div>
     </footer>
+
 
     <script>
         // Inisialisasi Lucide Icons

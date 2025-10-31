@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Paprika&display=swap");
+
 :root {
   --color-primary: #0c519b;
   --color-primary: #0c519b;
@@ -110,7 +112,7 @@ body {
   bottom: -4px;
   height: 2px;
   width: 100%;
-  background-color: var(--color-primary);
+  background-color: var(--color-warning);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s ease-in-out;
@@ -552,8 +554,168 @@ body {
 }
 
 footer {
-  background-color: var(--color-primary);
+  background-color: var(--color-warning);
   color: #fff;
   padding: 40px 0;
-  text-align: center;
+}
+
+/* Infinity Scroll Carousel Styles - ENHANCED */
+.infinity-scroll-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  padding: 20px 0;
+  background: transparent;
+}
+
+.infinity-scroll-container {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 20px;
+  width: fit-content;
+  flex-wrap: nowrap !important;
+}
+
+.infinity-card {
+  flex-shrink: 0;
+  flex-grow: 0;
+  width: 320px;
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: inline-block;
+}
+
+.infinity-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.infinity-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.infinity-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  display: block;
+}
+
+.infinity-card:hover .infinity-card-img {
+  transform: scale(1.05);
+}
+
+.infinity-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.infinity-card-title {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.3;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.infinity-card .badge {
+  width: fit-content;
+  font-weight: 600;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+}
+
+/* Animation for scrolling left */
+.scroll-left {
+  animation: scroll-left 30s linear infinite;
+  will-change: transform;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-340px * 4));
+  }
+}
+
+/* Animation for scrolling right */
+.scroll-right {
+  animation: scroll-right 30s linear infinite;
+  will-change: transform;
+}
+
+@keyframes scroll-right {
+  0% {
+    transform: translateX(calc(-340px * 4));
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Pause animation on hover */
+.infinity-scroll-wrapper:hover .infinity-scroll-container {
+  animation-play-state: paused;
+}
+
+/* Responsive adjustments for infinity scroll */
+@media (max-width: 767px) {
+  .infinity-card {
+    width: 260px;
+    height: 160px;
+  }
+
+  .infinity-card-title {
+    font-size: 0.9rem;
+  }
+
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-280px * 4));
+    }
+  }
+
+  @keyframes scroll-right {
+    0% {
+      transform: translateX(calc(-280px * 4));
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+}
+
+/* Additional specificity for infinity scroll to override any Bootstrap defaults */
+section .container-fluid .infinity-scroll-wrapper {
+  display: block !important;
+}
+
+section .container-fluid .infinity-scroll-wrapper .infinity-scroll-container {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+}
+
+.infinity-scroll-container > * {
+  flex-shrink: 0 !important;
 }

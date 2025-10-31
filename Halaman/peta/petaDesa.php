@@ -1,4 +1,3 @@
-<!-- Data tb_peta_desa belum dimasukkan -->
 <?php
 include "../../database/dbConnect.php";
 $conn = isset($konek) ? $konek : null;
@@ -31,11 +30,12 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <div class="d-flex justify-content-between align-items-center w-100 position-relative"
                 style="margin-left: 10.5%; transform: translateY(8px); margin-bottom: -9px;">
                 <a href="../../Halaman/Beranda.php" class="d-flex align-items-center text-black text-decoration-none ms-3 ms-md-0">
-                    <img src="../../assets/img/CDR_LOGO_DESA.png"
+                    <img src="../../assets/img/logo.png"
                         alt="Logo Desa Teniga"
                         style="height:40px; margin-bottom: 2px;">
-                    <div class="d-flex flex-column ms-2">
-                        <span class="fs-6 fw-bold">DESA TENIGA</span>
+                    <div class="d-flex flex-column ms-2" class="d-flex flex-column ms-1"
+                        style="font-family: Paprika, system-ui">
+                        <span class="fs-6 fw-bold">DESA WISATA TENIGA</span>
                         <span class="small fw-bold">TANJUNG LOMBOK UTARA</span>
                     </div>
                 </a>
@@ -48,20 +48,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <!-- Baris Navigasi -->
             <nav id="main-navigation" class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-4 py-1">
                 <a href="../../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
-                <a href="../../Halaman/berita.php" class="nav-link text-decoration-none px-3"><span class="nav-text">KABAR DESA</span></a>
-                <a href="../../Halaman/pelayanan.php" class="nav-link text-decoration-none px-3"><span class="nav-text">PELAYANAN</span></a>
-
-                <!-- PROFIL DESA -->
-                <div class="dropdown nav-dropdown">
-                    <a class="nav-link dropdown-toggle text-black text-decoration-none px-3" href="#" id="profilDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="nav-text me-1">PROFIL DESA</span>
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="profilDropdown">
-                        <li><a class="dropdown-item" href="../../Halaman/profil/lembaga.php">Lembaga Desa</a></li>
-                        <li><a class="dropdown-item" href="../../Halaman/profil/sejarahDesa.php">Sejarah Desa</a></li>
-                        <li><a class="dropdown-item" href="../../Halaman/profil/Demografi.php">Demografi Desa</a></li>
-                    </ul>
-                </div>
+                <a href="../../Halaman/pakettour.php" class="nav-link text-decoration-none px-3"><span class="nav-text">TOUR PACKAGES</span></a>
 
                 <!-- PETA INTERAKTIF -->
                 <div class="dropdown nav-dropdown">
@@ -75,6 +62,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                                 Peta Desa (Umum)
                             </a>
                         </li>
+                        <li><a class="dropdown-item" href="#">Peta UMKM</a></li>
                     </ul>
                 </div>
 
@@ -85,6 +73,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </nav>
         </div>
 
+        <!-- mobile -->
         <div class="mobile-menu" id="mobile-menu">
             <div class="mobile-menu-header">
                 <h5 class="fw-bold mb-0">Menu Navigasi</h5>
@@ -94,25 +83,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </div>
 
             <a href="../../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
-            <a href="../../Halaman/berita.php" class="nav-link text-decoration-none px-3"><span class="nav-text">KABAR DESA</span></a>
-            <a href="../../Halaman/pelayanan.php" class="nav-link text-decoration-none px-3"><span class="nav-text">PELAYANAN</span></a>
-
-            <!-- PROFIL DESA -->
-            <div class="dropdown nav-dropdown">
-                <a class="nav-link dropdown-toggle text-black text-decoration-none px-3" href="#" id="profilDropdown" aria-expanded="false">
-                    <span class="nav-text me-1">PROFIL DESA</span>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="profilDropdown">
-                    <li><a class="dropdown-item" href="../../Halaman/profil/lembaga.php">Lembaga Desa</a></li>
-                    <li><a class="dropdown-item" href="../../Halaman/profil/sejarahDesa.php">Sejarah Desa</a></li>
-                    <li><a class="dropdown-item" href="../../Halaman/profil/Demografi.php">Demografi Desa</a></li>
-                </ul>
-            </div>
+            <a href="../../Halaman/pakettour.php" class="nav-link text-decoration-none px-3"><span class="nav-text">PAKET TOUR</span></a>
 
             <!-- PETA INTERAKTIF -->
             <div class="dropdown nav-dropdown">
                 <a class="nav-link dropdown-toggle text-black active text-decoration-none px-3" href="#" id="petaDropdown" aria-expanded="false">
                     <span class="nav-text me-1">PETA INTERAKTIF</span>
+
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="petaDropdown">
                     <li>
@@ -121,6 +98,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                             Peta Desa (Umum)
                         </a>
                     </li>
+                    <li><a class="dropdown-item" href="#">Peta UMKM</a></li>
                 </ul>
             </div>
 
@@ -198,11 +176,73 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         </div>
     </main>
 
-    <footer class="text-white text-center py-4 mt-5" style="background-color: #0055aa;">
+    <!-- Footer -->
+    <footer class="footer-modern">
         <div class="container">
-            <p class="small mb-0">Hak Cipta © 2025 Pemerintah Desa Teniga. Semua hak dilindungi undang-undang. | Didukung Program Kosabangsa
-                <br>Universitas Bumigora | Dibuat oleh Ahmad Jul Hadi
-            </p>
+            <div class="row g-4">
+                <!-- Left Column: Logo & Subscribe -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-brand mb-4">
+                        <img
+                            src="../../assets/img/logo.png"
+                            alt="Logo Desa Teniga"
+                            class="footer-logo mb-3" />
+                        <h4 class="text-black fw-bold mb-1">Desa Wisata Teniga</h4>
+                        <p class="text-black-50 mb-4">
+                            Experience The Nature and The Life of Local People in Desa Wisata
+                            Teniga.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Middle Column: Information -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-black fw-bold mb-4">Information</h5>
+                    <ul class="footer-links list-unstyled">
+                        <li>
+                            <a href="#" class="text-black-50 text-decoration-none">About</a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-black-50 text-decoration-none">Tour Packages</a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-black-50 text-decoration-none">Events & Programs</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Right Column: Contact -->
+                <div class="col-lg-5 col-md-12">
+                    <h5 class="text-black fw-bold mb-4">Contact Us</h5>
+                    <div class="footer-contact">
+                        <div class="d-flex align-items-center mb-3">
+                            <i
+                                data-lucide="phone"
+                                class="text-black me-2"
+                                style="width: 20px; height: 20px"></i>
+                            <a
+                                href="tel:+6283189855434"
+                                class="text-black-50 text-decoration-none">+62 878-2261-8933</a>
+                        </div>
+                        <div class="d-flex align-items-center mb-4">
+                            <i
+                                data-lucide="mail"
+                                class="text-black me-2"
+                                style="width: 20px; height: 20px"></i>
+                            <a
+                                href="mailto:indahnalurita17@gmail.com"
+                                class="text-black-50 text-decoration-none">desateniga@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-bottom text-center mt-5 pt-4">
+                <p class="text-black-50 small mb-0">
+                    Copyright 2025 © Pokdarwis Teniga x Universitas Bumigora
+                </p>
+            </div>
         </div>
     </footer>
 
