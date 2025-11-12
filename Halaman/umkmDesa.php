@@ -203,48 +203,58 @@ if ($conn) {
             <?php endif; ?>
         </div>
     </section>
+    <br>
 
     <!-- footer -->
-    <footer class="footer-modern py-5 bg-warning">
+    <footer class="footer-modern bg-warning">
         <div class="container">
-            <div class="row g-3">
-                <!-- Left Column: Logo & Subscribe -->
-                <div class="col-lg-4 col-md-6">
+            <div class="row g-5 align-items-start">
+                <!-- Left Column: Logo & Description -->
+                <div class="col-lg-5 col-md-12">
                     <div class="footer-brand mb-4">
-                        <img
-                            src="../assets/img/logo.png"
-                            alt="Logo Desa Teniga"
-                            class="footer-logo mb-3" />
-                        <h4 class="text-black fw-bold mb-1">Desa Wisata Teniga</h4>
+                        <!-- Flex agar gambar sejajar -->
+                        <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+                            <img
+                                src="../assets/img/logo.png"
+                                alt="Logo Desa Teniga"
+                                class="footer-logo"
+                                style="max-height: 120px; width: auto; object-fit: contain;" />
+                            <img
+                                src="../assets/img/Logo-kosabangsa.jpg"
+                                alt="Logo Kosabangsa"
+                                class="footer-logo"
+                                style="max-height: 120px; width: auto; object-fit: contain;" />
+                        </div>
+
+                        <h4 class="text-black fw-bold mb-2">Desa Wisata Teniga</h4>
                         <p class="text-black-50 mb-4">
-                            Experience The Nature and The Life of Local People in Desa Wisata
-                            Teniga.
+                            Experience The Nature and The Life of Local People in Desa Wisata Teniga.
                         </p>
                     </div>
                 </div>
 
                 <!-- Middle Column: Information -->
-                <div class="col-lg-4 col-md-6 text-lg-start text-center">
-                    <h5 class="text-black fw-bold mb-3">Information</h5>
-                    <ul class="footer-links list-unstyled mb-0">
-                        <li><a href="#" class="text-black-50 text-decoration-none d-block mb-2">About</a></li>
-                        <li><a href="#" class="text-black-50 text-decoration-none d-block mb-2">Tour Packages</a></li>
-                        <li><a href="#" class="text-black-50 text-decoration-none d-block">Events & Programs</a></li>
+                <div class="col-lg-3 col-md-6 ms-lg-3">
+                    <h5 class="text-black fw-bold mb-4">Information</h5>
+                    <ul class="footer-links list-unstyled">
+                        <li><a href="#" class="text-black-50 text-decoration-none">About</a></li>
+                        <li><a href="#" class="text-black-50 text-decoration-none">Tour Packages</a></li>
+                        <li><a href="#" class="text-black-50 text-decoration-none">Events & Programs</a></li>
                     </ul>
                 </div>
 
                 <!-- Right Column: Contact Us -->
-                <div class="col-lg-4 col-md-12 text-lg-start text-center">
-                    <h5 class="text-black fw-bold mb-3">Contact Us</h5>
-                    <div class="footer-contact d-inline-block text-start">
-                        <div class="d-flex align-items-center mb-2 justify-content-lg-start justify-content-center">
-                            <i data-lucide="phone" class="text-black me-2" style="width: 18px; height: 18px;"></i>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-black fw-bold mb-4">Contact Us</h5>
+                    <div class="footer-contact">
+                        <div class="d-flex align-items-center mb-3">
+                            <i data-lucide="phone" class="text-black me-2"></i>
                             <a href="tel:+6287822618933" class="text-black-50 text-decoration-none">
                                 +62 878-2261-8933
                             </a>
                         </div>
-                        <div class="d-flex align-items-center justify-content-lg-start justify-content-center">
-                            <i data-lucide="mail" class="text-black me-2" style="width: 18px; height: 18px;"></i>
+                        <div class="d-flex align-items-center mb-4">
+                            <i data-lucide="mail" class="text-black me-2"></i>
                             <a href="mailto:desateniga@gmail.com" class="text-black-50 text-decoration-none">
                                 desateniga@gmail.com
                             </a>
