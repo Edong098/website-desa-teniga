@@ -112,7 +112,7 @@ body {
   bottom: -4px;
   height: 2px;
   width: 100%;
-  background-color: var(--color-warning);
+  background-color: var(--color-primary);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s ease-in-out;

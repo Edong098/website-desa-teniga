@@ -27,8 +27,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <header class="hero-background position-relative">
         <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100"></div>
         <div class="container position-relative py-3" style="z-index: 20;">
-            <div class="d-flex justify-content-between align-items-center w-100 position-relative"
-                style="margin-left: 10.5%; transform: translateY(8px); margin-bottom: -9px;">
+            <div class="d-flex justify-content-between align-items-center w-100 position-relative">
                 <a href="../../Halaman/Beranda.php" class="d-flex align-items-center text-black text-decoration-none ms-3 ms-md-0">
                     <img src="../../assets/img/logo.png"
                         alt="Logo Desa Teniga"
@@ -46,7 +45,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </div>
 
             <!-- Baris Navigasi -->
-            <nav id="main-navigation" class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-4 py-1">
+            <nav id="main-navigation" class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-1 py-1">
                 <a href="../../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
                 <a href="../../Halaman/pakettour.php" class="nav-link text-decoration-none px-3"><span class="nav-text">TOUR PACKAGES</span></a>
 
@@ -189,11 +188,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                                 src="../../assets/img/logo.png"
                                 alt="Logo Desa Teniga"
                                 class="footer-logo"
+                                loading="lazy"
                                 style="max-height: 120px; width: auto; object-fit: contain;" />
                             <img
                                 src="../../assets/img/Logo-kosabangsa.jpg"
                                 alt="Logo Kosabangsa"
                                 class="footer-logo"
+                                loading="lazy"
                                 style="max-height: 120px; width: auto; object-fit: contain;" />
                         </div>
 

@@ -7,19 +7,21 @@
     <title>Wisata - Desa Teniga</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
     <link rel="stylesheet" href="../assets/CSS/wisata.css">
+    <script src="../assets/JS/wisata.js" defer></script>
 </head>
 
 <body>
 
     <body class="bg-light">
+        <!-- Header -->
         <header class="hero-background position-relative">
             <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100"></div>
 
             <div class="container position-relative py-3" style="z-index: 20;">
-                <div class="d-flex justify-content-between align-items-center w-100 position-relative"
-                    style="margin-left: 10.5%; transform: translateY(8px); margin-bottom: -9px;">
+
+                <div class="d-flex justify-content-between align-items-center w-100 position-relative">
                     <a href="../Halaman/Beranda.php" class="d-flex align-items-center text-black text-decoration-none ms-3 ms-md-0">
                         <img src="../assets/img/logo.png"
                             alt="Logo Desa Teniga"
@@ -36,28 +38,36 @@
                     </button>
                 </div>
 
-                <!-- Baris Navigasi -->
-                <nav id="main-navigation" class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-4 py-1">
+                <!-- mobile -->
+                <nav id="main-navigation"
+                    class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-1 py-2">
                     <a href="../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
                     <a href="../Halaman/pakettour.php" class="nav-link text-decoration-none px-3"><span class="nav-text">TOUR PACKAGES</span></a>
+
                     <!-- PETA INTERAKTIF -->
-                    <div class="dropdown nav-dropdown">
-                        <a class="nav-link dropdown-toggle text-black text-decoration-none px-3" href="#" id="petaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="nav-text me-1">PETA INTERAKTIF</span>
+                    <div class="dropdown">
+                        <a
+                            class="nav-link dropdown-toggle text-white text-decoration-none px-3"
+                            href="#"
+                            id="petaDropdown"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <span class="nav-text">PETA INTERAKTIF</span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="petaDropdown">
-                            <li><a class="dropdown-item" href="../Halaman/peta/petaDesa.php">Peta Desa (Umum)</a></li>
+                            <li>
+                                <a class="dropdown-item" href="../Halaman/peta/petaDesa.php">Peta Desa (UMUM)</a>
+                            </li>
                             <li><a class="dropdown-item" href="#">Peta UMKM</a></li>
                         </ul>
                     </div>
 
-                    <!-- Objek wisata -->
-                    <a href="../Halaman/wisata.php" class="nav-link text-black active text-decoration-none px-3"><span class="nav-text">OBJEK WISATA</span></a>
-                    <!-- umkm desa -->
+                    <a href="../Halaman/wisata.php" class="nav-link active text-black text-decoration-none px-3"><span class="nav-text">OBJEK WISATA</span></a>
                     <a href="../Halaman/umkmDesa.php" class="nav-link text-black text-decoration-none px-3"><span class="nav-text">UMKM DESA</span></a>
                 </nav>
             </div>
 
+            <!-- Mobile Menu -->
             <div class="mobile-menu" id="mobile-menu">
                 <div class="mobile-menu-header">
                     <h5 class="fw-bold mb-0">Menu Navigasi</h5>
@@ -83,7 +93,7 @@
                 <!-- Objek wisata -->
                 <a href="../Halaman/wisata.php" class="nav-link text-black active text-decoration-none px-3"><span class="nav-text">OBJEK WISATA</span></a>
                 <!-- umkm desa -->
-                <a href="../Halaman/umkmDesa.php" class="nav-link text-black  text-decoration-none px-3"><span class="nav-text">UMKM DESA</span></a>
+                <a href="../Halaman/umkmDesa.php" class="nav-link text-black text-decoration-none px-3"><span class="nav-text">UMKM DESA</span></a>
             </div>
         </header>
 
@@ -111,7 +121,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata1.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata1.jpeg" class="infinity-card-img" alt="Gua Ratu Teniga">
+                                    <img src="../uploads/wisata/wisata1.jpeg" loading="lazy" class="infinity-card-img" alt="Gua Ratu Teniga">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             Panorama Teniga
@@ -125,7 +135,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata2.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata2.jpeg" class="infinity-card-img" alt="Pantai Krakas">
+                                    <img src="../uploads/wisata/wisata2.jpeg" loading="lazy" class="infinity-card-img" alt="Pantai Krakas">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             petualangan
@@ -139,7 +149,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata3.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata3.jpeg" class="infinity-card-img" alt="Air Terjun Tiu Teja">
+                                    <img src="../uploads/wisata/wisata3.jpeg" loading="lazy" class="infinity-card-img" alt="Air Terjun Tiu Teja">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             Experience
@@ -153,7 +163,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata4.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata4.jpeg" class="infinity-card-img" alt="Bukit Teniga">
+                                    <img src="../uploads/wisata/wisata4.jpeg" loading="lazy" class="infinity-card-img" alt="Bukit Teniga">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             Relax & Chill Spot
@@ -167,7 +177,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata5.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata5.jpeg" class="infinity-card-img" alt="Gua Ratu Teniga">
+                                    <img src="../uploads/wisata/wisata5.jpeg" loading="lazy" class="infinity-card-img" alt="Gua Ratu Teniga">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             Pemandangan
@@ -181,7 +191,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata6.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata6.jpeg" class="infinity-card-img" alt="Pantai Krakas">
+                                    <img src="../uploads/wisata/wisata6.jpeg" loading="lazy" class="infinity-card-img" alt="Pantai Krakas">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             Relaxation & Learning
@@ -195,7 +205,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata7.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata7.jpeg" class="infinity-card-img" alt="Air Terjun Tiu Teja">
+                                    <img src="../uploads/wisata/wisata7.jpeg" loading="lazy" class="infinity-card-img" alt="Air Terjun Tiu Teja">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             Alam
@@ -209,7 +219,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata1.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata1.jpeg" class="infinity-card-img" alt="Bukit Teniga">
+                                    <img src="../uploads/wisata/wisata1.jpeg" loading="lazy" class="infinity-card-img" alt="Bukit Teniga">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             Pegunungan
@@ -229,7 +239,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata1.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata1.jpeg" class="infinity-card-img" alt="Gua Ratu Teniga">
+                                    <img src="../uploads/wisata/wisata1.jpeg" loading="lazy" class="infinity-card-img" alt="Gua Ratu Teniga">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             Panorama Teniga
@@ -243,7 +253,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata2.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata2.jpeg" class="infinity-card-img" alt="Pantai Krakas">
+                                    <img src="../uploads/wisata/wisata2.jpeg" loading="lazy" class="infinity-card-img" alt="Pantai Krakas">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             Petualangan
@@ -257,7 +267,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata3.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata3.jpeg" class="infinity-card-img" alt="Air Terjun Tiu Teja">
+                                    <img src="../uploads/wisata/wisata3.jpeg" loading="lazy" class="infinity-card-img" alt="Air Terjun Tiu Teja">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             Experience
@@ -271,7 +281,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata4.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata4.jpeg" class="infinity-card-img" alt="Bukit Teniga">
+                                    <img src="../uploads/wisata/wisata4.jpeg" loading="lazy" class="infinity-card-img" alt="Bukit Teniga">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             Relax & Chill Spot
@@ -285,7 +295,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata5.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata5.jpeg" class="infinity-card-img" alt="Gua Ratu Teniga">
+                                    <img src="../uploads/wisata/wisata5.jpeg" loading="lazy" class="infinity-card-img" alt="Gua Ratu Teniga">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             Pemandangan
@@ -299,7 +309,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata1.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata6.jpeg" class="infinity-card-img" alt="Pantai Krakas">
+                                    <img src="../uploads/wisata/wisata6.jpeg" loading="lazy" class="infinity-card-img" alt="Pantai Krakas">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             Relaxation & Learning
@@ -313,7 +323,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata2.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata2.jpeg" class="infinity-card-img" alt="Air Terjun Tiu Teja">
+                                    <img src="../uploads/wisata/wisata2.jpeg" loading="lazy" class="infinity-card-img" alt="Air Terjun Tiu Teja">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             Petualangan
@@ -327,7 +337,7 @@
                         <div class="infinity-card">
                             <a href="../uploads/wisata/wisata3.jpeg" class="text-decoration-none">
                                 <div class="infinity-card-inner">
-                                    <img src="../uploads/wisata/wisata3.jpeg" class="infinity-card-img" alt="Bukit Teniga">
+                                    <img src="../uploads/wisata/wisata3.jpeg" loading="lazy" class="infinity-card-img" alt="Bukit Teniga">
                                     <div class="infinity-card-overlay">
                                         <span class="badge mb-2" style="background-color: #f4d03f; color: #333;">
                                             Experience
@@ -357,11 +367,13 @@
                                     src="../assets/img/logo.png"
                                     alt="Logo Desa Teniga"
                                     class="footer-logo"
+                                    loading="lazy"
                                     style="max-height: 120px; width: auto; object-fit: contain;" />
                                 <img
                                     src="../assets/img/Logo-kosabangsa.jpg"
                                     alt="Logo Kosabangsa"
                                     class="footer-logo"
+                                    loading="lazy"
                                     style="max-height: 120px; width: auto; object-fit: contain;" />
                             </div>
 
@@ -412,51 +424,6 @@
         </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
-            // Inisialisasi Lucide Icons
-            lucide.createIcons();
-
-            // Dropdown Mobile Toggle — Bisa buka & tutup kembali
-            document.querySelectorAll('.mobile-menu .dropdown-toggle').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-
-                    const submenu = btn.nextElementSibling;
-                    const isOpen = submenu.classList.contains('show');
-
-                    // Tutup semua submenu lain dulu
-                    document.querySelectorAll('.mobile-menu .dropdown-menu.show').forEach(menu => {
-                        if (menu !== submenu) {
-                            menu.classList.remove('show');
-                        }
-                    });
-                    document.querySelectorAll('.mobile-menu .dropdown-toggle.show').forEach(toggle => {
-                        if (toggle !== btn) {
-                            toggle.classList.remove('show');
-                        }
-                    });
-
-                    // Toggle submenu yang diklik
-                    submenu.classList.toggle('show', !isOpen);
-                    btn.classList.toggle('show', !isOpen);
-                });
-            });
-
-            // LOGIKA MENU HAMBURGER UTAMA
-            (function() {
-                const mobileMenu = document.getElementById('mobile-menu');
-                const openBtn = document.getElementById('mobile-menu-btn');
-                const closeBtn = document.getElementById('close-menu-btn');
-
-                function toggleMobileMenu() {
-                    mobileMenu.classList.toggle('show');
-                    document.body.classList.toggle('no-scroll');
-                }
-
-                openBtn.addEventListener('click', toggleMobileMenu);
-                closeBtn.addEventListener('click', toggleMobileMenu);
-            })();
-        </script>
     </body>
 
 </html>

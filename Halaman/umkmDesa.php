@@ -2,48 +2,28 @@
 include "../database/dbConnect.php";
 
 $conn = $konek;
+$produk_list = [];
 
 if ($conn) {
-    // Ambil semua data UMKM dari tabel tb_umkm
-    $all_umkm = [];
-    $query = "SELECT * FROM tb_umkm ORDER BY tanggal_input DESC";
+    $query = "SELECT * FROM tb_produk_umkm ORDER BY tanggal_input DESC";
     $result = $conn->query($query);
 
-    // KODE BARU YANG BENAR:
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-
-            // Gambar produk (Logika ini sebenarnya tidak perlu di loop ini, tapi tidak masalah)
-            $image_path = htmlspecialchars($row['gambar_produk'] ?? '');
-            $image = !empty($image_path)
-                ? "../uploads/umkm/" . $image_path
-                : "https://placehold.co/800x400/a2d2ff/000000?text=Produk+UMKM+Teniga";
-
-            // Format harga (Logika ini juga tidak perlu di loop ini)
-            $harga_produk = $row['harga_produk'] ?? 0;
-            $harga_display = 'Rp ' . number_format($harga_produk, 0, ',', '.');
-
-            // Format kontak WhatsApp (Logika ini juga tidak perlu di loop ini)
-            $kontak_clean = preg_replace('/[^0-9]/', '', $row['kontak_umkm'] ?? '');
-            if (!empty($kontak_clean) && substr($kontak_clean, 0, 1) === '0') {
-                $kontak_clean = '62' . substr($kontak_clean, 1);
-            }
-
-            $message = "Halo, saya tertarik dengan produk *{$row['produk']}* dari *{$row['nama_umkm']}* yang ada di website Desa Wisata Teniga. Apakah produk ini masih tersedia?";
-            $kontak_link = "https://wa.me/" . $kontak_clean . "?text=" . urlencode($message);
-
-            // Susun data ke array $all_umkm - LAKUKAN DI SINI!
-            $all_umkm[] = [
-                'nama_umkm' => htmlspecialchars($row['nama_umkm'] ?? ''),
-                'produk' => htmlspecialchars($row['produk'] ?? ''),
-                'harga_produk' => $harga_produk,
-                'kontak_umkm' => htmlspecialchars($row['kontak_umkm'] ?? ''),
-                'alamat_umkm' => htmlspecialchars($row['alamat_umkm'] ?? ''),
-                'gambar_produk' => htmlspecialchars($row['gambar_produk'] ?? '')
+            $produk_list[] = [
+                'nama_produk' => htmlspecialchars($row['nama_produk']),
+                'jenis_produk' => htmlspecialchars($row['jenis_produk']),
+                'harga' => (int)$row['harga_mulai'],
+                'deskripsi' => htmlspecialchars($row['deskripsi']),
+                'alamat' => htmlspecialchars($row['alamat_lengkap']),
+                'gambar' => htmlspecialchars($row['gambar_produk'])
             ];
         }
     }
 }
+
+// NOMOR WA PENJUAL
+$wa_penjual = "6285333147733";
 ?>
 
 <!DOCTYPE html>
@@ -55,18 +35,52 @@ if ($conn) {
     <title>UMKM Desa Teniga</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../assets/CSS/umkm.css">
+    <script src="../assets/JS/mobileMenu.js" defer></script>
 </head>
+
+
+<!-- Modal WhatsApp -->
+<div class="modal fade" id="waModal" tabindex="-1" aria-labelledby="waModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="waModalLabel">Form Pemesanan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="waForm">
+                    <input type="hidden" id="waProduk">
+                    <div class="mb-3">
+                        <label class="form-label">Nama Pemesan</label>
+                        <input type="text" class="form-control" id="namaPemesan" placeholder="Masukkan nama Anda" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Alamat Lengkap</label>
+                        <textarea class="form-control" id="alamatLengkap" rows="2" placeholder="Alamat pengiriman" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Jumlah Pesanan</label>
+                        <input type="number" class="form-control" id="jumlah" min="1" value="1" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 rounded-pill fw-semibold">
+                        <i data-lucide="send" class="me-1"></i> Kirim ke WhatsApp
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <body class="bg-light">
     <header class="hero-background position-relative">
         <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100"></div>
 
         <div class="container position-relative py-3" style="z-index: 20;">
-            <div class="d-flex justify-content-between align-items-center w-100 position-relative"
-                style="margin-left: 10.5%; transform: translateY(8px); margin-bottom: -9px;">
+            <div class="d-flex justify-content-between align-items-center w-100 position-relative">
                 <a href="../Halaman/Beranda.php" class="d-flex align-items-center text-black text-decoration-none ms-3 ms-md-0">
                     <img src="../assets/img/logo.png"
                         alt="Logo Desa Teniga"
@@ -84,7 +98,7 @@ if ($conn) {
             </div>
 
             <!-- Baris Navigasi -->
-            <nav id="main-navigation" class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-4 py-1">
+            <nav id="main-navigation" class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-1 py-1">
                 <a href="../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
                 <a href="../Halaman/pakettour.php" class="nav-link text-decoration-none px-3"><span class="nav-text">TOUR PACKAGES</span></a>
                 <!-- PETA INTERAKTIF -->
@@ -145,57 +159,53 @@ if ($conn) {
     <!-- main -->
     <section class="py-5 bg-white">
         <div class="container">
-            <?php if (!empty($all_umkm)): ?>
+            <?php if (!empty($produk_list)): ?>
                 <div class="row g-4 justify-content-center">
-                    <?php foreach ($all_umkm as $card): ?>
+                    <?php foreach ($produk_list as $produk): ?>
                         <div class="col-12 col-sm-6 col-lg-4 d-flex align-items-stretch">
-                            <div class="card shadow umkm-card text-dark new-design w-100">
+                            <div class="card shadow umkm-card w-100">
+
                                 <div class="card-image-wrapper position-relative">
-                                    <img src="<?php echo '../uploads/umkm/' . htmlspecialchars($card['gambar_produk']); ?>"
-                                        class="card-img-top rounded-top"
-                                        alt="<?php echo htmlspecialchars($card['produk']); ?>">
+                                    <img src="../uploads/umkm/<?php echo $produk['gambar']; ?>"
+                                        class="card-img-top"
+                                        loading="lazy"
+                                        alt="<?php echo $produk['nama_produk']; ?>">
 
                                     <div class="card-overlay-text p-3">
-                                        <span class="badge rounded-pill umkm-badge mb-2 fw-medium">Produk Pisang</span>
+                                        <span class="badge rounded-pill umkm-badge mb-2">
+                                            <?php echo $produk['jenis_produk']; ?>
+                                        </span>
 
-                                        <h5 class="card-title-overlay fw-bold mb-1 line-clamp-2 text-white">
-                                            <?php echo htmlspecialchars($card['produk']); ?>
+                                        <h5 class="fw-bold text-white line-clamp-2">
+                                            <?php echo $produk['nama_produk']; ?>
                                         </h5>
                                     </div>
                                 </div>
 
                                 <div class="card-body d-flex flex-column p-4">
-                                    <h5 class="card-title mb-2 fw-bold text-black">
-                                        <?php echo htmlspecialchars($card['nama_umkm']); ?>
-                                    </h5>
-
-                                    <h6 class="card-subtitle mb-3 fw-semibold text-dark">
-                                        Rp <?php echo number_format($card['harga_produk']); ?>
+                                    <h6 class="fw-bold text-dark mb-1">
+                                        Rp <?php echo number_format($produk['harga'], 0, ',', '.'); ?>
                                     </h6>
 
-                                    <div class="card-text text-secondary small flex-grow-1 mb-3">
-                                        <div class="d-flex align-items-start mb-1">
-                                            <i data-lucide="building" style="width:18px;height:18px; margin-top: 3px;"></i>
-                                            <span class="ms-2 fw-semibold line-clamp-1">
-                                                <?php echo htmlspecialchars($card['nama_umkm']); ?>
-                                            </span>
-                                        </div>
+                                    <p class="text-secondary small mb-2">
+                                        <?php echo $produk['deskripsi']; ?>
+                                    </p>
 
-                                        <div class="d-flex align-items-start">
-                                            <i data-lucide="map-pin" style="width:18px;height:18px; margin-top: 3px;"></i>
-                                            <span class="ms-2 text-wrap line-clamp-2">
-                                                <?php echo htmlspecialchars($card['alamat_umkm']); ?>
-                                            </span>
-                                        </div>
+                                    <div class="text-secondary small mb-3">
+                                        <i data-lucide="map-pin" style="width:16px;height:16px"></i>
+                                        <span class="ms-1"><?php echo $produk['alamat']; ?></span>
                                     </div>
 
-                                    <a href="https://wa.me/<?php echo preg_replace('/[^0-9]/', '', $card['kontak_umkm']); ?>?text=<?php echo urlencode('Halo, saya ingin pesan ' . $card['produk']); ?>"
-                                        target="_blank"
-                                        class="mt-auto wa-button btn-warning w-100 fw-semibold btn-sm rounded-pill">
-                                        <i data-lucide="whatsapp" class="me-1" style="width:20px;height:20px;"></i>
+                                    <button
+                                        class="btn btn-warning rounded-pill mt-auto fw-semibold wa-button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#waModal"
+                                        data-produk="<?php echo $produk['nama_produk']; ?>">
+                                        <i data-lucide="whatsapp" class="me-1"></i>
                                         Hubungi Sekarang
-                                    </a>
+                                    </button>
                                 </div>
+
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -203,6 +213,7 @@ if ($conn) {
             <?php endif; ?>
         </div>
     </section>
+
     <br>
 
     <!-- footer -->
@@ -271,54 +282,6 @@ if ($conn) {
             </div>
         </div>
     </footer>
-
-
-    <script>
-        // Inisialisasi Lucide Icons
-        lucide.createIcons();
-
-        // Dropdown Mobile Toggle — Bisa buka & tutup kembali
-        document.querySelectorAll('.mobile-menu .dropdown-toggle').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-
-                const submenu = btn.nextElementSibling;
-                const isOpen = submenu.classList.contains('show');
-
-                // Tutup semua submenu lain dulu
-                document.querySelectorAll('.mobile-menu .dropdown-menu.show').forEach(menu => {
-                    if (menu !== submenu) {
-                        menu.classList.remove('show');
-                    }
-                });
-                document.querySelectorAll('.mobile-menu .dropdown-toggle.show').forEach(toggle => {
-                    if (toggle !== btn) {
-                        toggle.classList.remove('show');
-                    }
-                });
-
-                // Toggle submenu yang diklik
-                submenu.classList.toggle('show', !isOpen);
-                btn.classList.toggle('show', !isOpen);
-            });
-        });
-
-        // LOGIKA MENU HAMBURGER UTAMA
-        (function() {
-            const mobileMenu = document.getElementById('mobile-menu');
-            const openBtn = document.getElementById('mobile-menu-btn');
-            const closeBtn = document.getElementById('close-menu-btn');
-
-            function toggleMobileMenu() {
-                mobileMenu.classList.toggle('show');
-                document.body.classList.toggle('no-scroll');
-            }
-
-            openBtn.addEventListener('click', toggleMobileMenu);
-            closeBtn.addEventListener('click', toggleMobileMenu);
-        })();
-    </script>
-
 </body>
 
 </html>

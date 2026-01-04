@@ -22,9 +22,12 @@ include "../database/dbConnect.php";
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap"
         rel="stylesheet" />
     <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../assets/CSS/beranda.css" />
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/JS/beranda.js" defer></script>
 </head>
 
 <body class="bg-gray-50">
@@ -52,6 +55,7 @@ include "../database/dbConnect.php";
                     </div>
                 </a>
 
+                <!-- Mobile Menu Button -->
                 <button
                     id="mobile-menu-btn"
                     class="d-lg-none text-white border-0 bg-transparent"
@@ -63,6 +67,7 @@ include "../database/dbConnect.php";
                 </button>
             </div>
 
+            <!-- Desktop Navigation -->
             <nav
                 id="main-navigation"
                 class="d-none d-lg-flex justify-content-center text-white small fw-bold mt-3">
@@ -121,7 +126,7 @@ include "../database/dbConnect.php";
             </div>
             <div class="mobile-dropdown-menu" id="mobile-dropdown-peta">
                 <a class="mobile-dropdown-item" href="../Halaman/peta/petaDesa.php">Peta Desa (UMUM)</a>
-                <a class="dropdown-item" href="#">Peta UMKM</a>
+                <a class="mobile-dropdown-item" href="#">Peta UMKM</a>
             </div>
 
             <a href="../Halaman/wisata.php" class="mobile-nav-link">OBJEK WISATA</a>
@@ -169,7 +174,9 @@ include "../database/dbConnect.php";
                                                 <img
                                                     src="../assets/img/herocarousel1.jpg"
                                                     alt="Ecoventure"
-                                                    class="hero-card-img" />
+                                                    class="hero-card-img"
+                                                    loading="lazy"
+                                                    decoding="async" />
                                                 <div class="hero-card-overlay">
                                                     <h5 class="hero-card-title">
                                                         Ecoventure<br />Soft Trekking
@@ -182,7 +189,9 @@ include "../database/dbConnect.php";
                                                 <img
                                                     src="../assets/img/herocarousel2.png"
                                                     alt="Village Life"
-                                                    class="hero-card-img" />
+                                                    class="hero-card-img"
+                                                    loading="lazy"
+                                                    decoding="async" />
                                                 <div class="hero-card-overlay">
                                                     <h5 class="hero-card-title">
                                                         Experience A<br />Village Life Of<br />Teniga People
@@ -195,7 +204,9 @@ include "../database/dbConnect.php";
                                                 <img
                                                     src="../assets/img/herocarousel3.png"
                                                     alt="Waterfall"
-                                                    class="hero-card-img" />
+                                                    class="hero-card-img"
+                                                    loading="lazy"
+                                                    decoding="async" />
                                                 <div class="hero-card-overlay">
                                                     <h5 class="hero-card-title">
                                                         Gazebo<br />Chill View
@@ -214,7 +225,9 @@ include "../database/dbConnect.php";
                                                 <img
                                                     src="../assets/img/herocarousel4.png"
                                                     alt="Culture"
-                                                    class="hero-card-img" />
+                                                    class="hero-card-img"
+                                                    loading="lazy"
+                                                    decoding="async" />
                                                 <div class="hero-card-overlay">
                                                     <h5 class="hero-card-title">Sky<br />View</h5>
                                                 </div>
@@ -225,7 +238,9 @@ include "../database/dbConnect.php";
                                                 <img
                                                     src="../assets/img/herocarousel5.jpg"
                                                     alt="Beach"
-                                                    class="hero-card-img" />
+                                                    class="hero-card-img"
+                                                    loading="lazy"
+                                                    decoding="async" />
                                                 <div class="hero-card-overlay">
                                                     <h5 class="hero-card-title">
                                                         Local<br />Cullinary
@@ -238,7 +253,9 @@ include "../database/dbConnect.php";
                                                 <img
                                                     src="../assets/img/herocarousel666.jpg"
                                                     alt="Local Food"
-                                                    class="hero-card-img" />
+                                                    class="hero-card-img"
+                                                    loading="lazy"
+                                                    decoding="async" />
                                                 <div class="hero-card-overlay">
                                                     <h5 class="hero-card-title">Reading<br />Comapertement</h5>
                                                 </div>
@@ -281,37 +298,72 @@ include "../database/dbConnect.php";
                 <p> Nestled in the verdant hills of Lombok Utara, Desa Teniga offers a rare escape from the rush of modern life. Here, the rhythm of life flows with the gentle cascades of Elong Tune waterfall and the swaying of emerald rice terraces. Wake up to the chorus of tropical birds, trek through lush forests with local guides who know every hidden trail, and immerse yourself in authentic village traditions that have been preserved for generations. Whether you're learning traditional farming techniques, savoring home-cooked meals with local families, or simply breathing in the pure mountain air, Teniga invites you to disconnect from the chaos and reconnect with what truly matters. This isn't just a destination—it's a journey back to simplicity, where every moment becomes a memory and every experience touches the soul.</p>
             </div>
 
-            <div class="container text-center">
-                <div class="row">
-                    <div class="col">
-                        <h3>KOSABANGSA 2025 : Kolaborasi UBG dan UNRAM di Desa Teniga</h3><br>
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/nT33QXggChA" title="KOSABANGSA 2025 : Kolaborasi UBG dan UNRAM di Desa Teniga" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <!-- NEWS CARDS -->
+            <div class="container text-center my-5">
+                <div class="row g-4">
+                    <div class="col-12 col-md-6">
+                        <h5 class="fw-bold mb-3" style="font-size: 1.1rem; color: var(--color-dark-blue);">
+                            KOSABANGSA 2025: Kolaborasi UBG dan UNRAM
+                        </h5>
+                        <div class="ratio ratio-16x9 shadow-sm rounded overflow-hidden">
+                            <iframe
+                                src="https://www.youtube.com/embed/nT33QXggChA?rel=0"
+                                title="KOSABANGSA 2025"
+                                loading="lazy"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
                     </div>
-                    <br>
-                    <div class="col">
-                        <h3>Penyerahan Alat dan Pelatihan Kelompok Pisang Desa Teniga</h3>
-                        <br>
-                        <iframe src="https://drive.google.com/file/d/1Zik5jitef2NFlvY7GxhbNCtbNc5TGZih/preview" width="560" height="315" allow="autoplay"></iframe>
+
+                    <!--  -->
+                    <div class="col-12 col-md-6">
+                        <h5 class="fw-bold mb-3" style="font-size: 1.1rem; color: var(--color-dark-blue);">
+                            Penyerahan Alat & Pelatihan Kelompok Pisang
+                        </h5>
+                        <div class="ratio ratio-16x9 shadow-sm rounded overflow-hidden">
+                            <iframe
+                                src="https://drive.google.com/file/d/1Zik5jitef2NFlvY7GxhbNCtbNc5TGZih/preview"
+                                title="Pelatihan Kelompok Pisang"
+                                loading="lazy"
+                                allow="encrypted-media"
+                                sandbox="allow-scripts allow-same-origin allow-presentation">
+                            </iframe>
+                        </div>
                     </div>
                 </div>
-                <br><br>
-                <div class="row">
-                    <div class="col">
-                        <h3> Sosialisasi & Pengenalan Website Wisata <br> Desa Teniga</h3>
-                        <br>
-                        <iframe
-                            src="https://drive.google.com/file/d/1sunm_EiniiAhZnjpYVB4sFMWvw7AKN1i/preview"
-                            width="560"
-                            height="315"
-                            allow="autoplay"
-                            style="border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.2);"></iframe>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-12 col-md-6">
+                        <h5 class="fw-bold mb-3" style="font-size: 1.1rem; color: var(--color-dark-blue);">
+                            Sosialisasi Website Wisata Desa Teniga
+                        </h5>
+                        <div class="ratio ratio-16x9 shadow-sm rounded overflow-hidden">
+                            <iframe
+                                src="https://drive.google.com/file/d/1sunm_EiniiAhZnjpYVB4sFMWvw7AKN1i/preview"
+                                title="Sosialisasi Website"
+                                loading="lazy"
+                                allow="encrypted-media"
+                                sandbox="allow-scripts allow-same-origin allow-presentation">
+                            </iframe>
+                        </div>
                     </div>
-                    <div class="col">
-                        <h3>Chill Savvah from the Top <br> of Teniga Village</h3><br>
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/6Nf9nZp2w3w?si=wSKa-vNXrn33LGbR" title="Chill Savvah from the Top of Teniga Village" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+                    <div class="col-12 col-md-6">
+                        <h5 class="fw-bold mb-3" style="font-size: 1.1rem; color: var(--color-dark-blue);">
+                            Chill Savvah from the Top of Teniga Village
+                        </h5>
+                        <div class="ratio ratio-16x9 shadow-sm rounded overflow-hidden">
+                            <iframe
+                                src="https://www.youtube.com/embed/6Nf9nZp2w3w?rel=0"
+                                title="Chill Savvah Teniga"
+                                loading="lazy"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
                     </div>
                 </div>
-                <br>
             </div>
 
             <!-- Lihat Semua -->
@@ -336,11 +388,15 @@ include "../database/dbConnect.php";
                                 src="../assets/img/logo.png"
                                 alt="Logo Desa Teniga"
                                 class="footer-logo"
+                                loading="lazy"
+                                decoding="async"
                                 style="max-height: 126px; width: auto; object-fit: contain;" />
                             <img
                                 src="../assets/img/Logo-kosabangsa.jpg"
                                 alt="Logo Kosabangsa"
                                 class="footer-logo"
+                                loading="lazy"
+                                decoding="async"
                                 style="max-height: 126px; width: auto; object-fit: contain;" />
                         </div>
 
@@ -389,118 +445,6 @@ include "../database/dbConnect.php";
             </div>
         </div>
     </footer>
-
-
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        lucide.createIcons();
-
-        (function() {
-            const LONGPRESS_MS = 400;
-
-            document.querySelectorAll(".dropdown").forEach((drop) => {
-                const toggle = drop.querySelector(".dropdown-toggle");
-                if (!toggle) return;
-
-                if (!toggle.dataset.href) {
-                    const firstItem = drop.querySelector(".dropdown-item[href]");
-                    if (firstItem) toggle.dataset.href = firstItem.getAttribute("href");
-                }
-
-                let pressTimer = null;
-                const startPress = (e) => {
-                    if (!toggle.dataset.href) return;
-                    pressTimer = Date.now();
-                };
-
-                const endPress = (e) => {
-                    if (!toggle.dataset.href || pressTimer === null) return;
-                    const dur = Date.now() - pressTimer;
-                    pressTimer = null;
-                    // long-press -> navigate
-                    if (dur >= LONGPRESS_MS) {
-                        window.location.href = toggle.dataset.href;
-                    }
-                };
-
-                toggle.addEventListener("touchstart", startPress, {
-                    passive: true,
-                });
-                toggle.addEventListener("mousedown", startPress);
-                toggle.addEventListener("touchend", endPress);
-                toggle.addEventListener("mouseup", endPress);
-
-                toggle.addEventListener("click", function(e) {
-                    const href = this.dataset.href;
-                    const isOpen = drop.classList.contains("show");
-                    if (href && isOpen) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        window.location.href = href;
-                    }
-                });
-            });
-        })();
-
-        (function() {
-            if ("ontouchstart" in window) return;
-            if (window.matchMedia && !window.matchMedia("(hover: hover)").matches)
-                return;
-
-            document.querySelectorAll(".dropdown").forEach((drop) => {
-                const toggle = drop.querySelector(".dropdown-toggle");
-                if (!toggle) return;
-
-                let bs = bootstrap.Dropdown.getOrCreateInstance(toggle);
-                let hideTimer = null;
-
-                drop.addEventListener("mouseenter", () => {
-                    if (hideTimer) {
-                        clearTimeout(hideTimer);
-                        hideTimer = null;
-                    }
-                    bs.show();
-                });
-
-                drop.addEventListener("mouseleave", () => {
-                    hideTimer = setTimeout(() => {
-                        bs.hide();
-                    }, 50);
-                });
-            });
-        })();
-
-        (function() {
-            const mobileMenu = document.getElementById("mobile-menu");
-            const openBtn = document.getElementById("mobile-menu-btn");
-            const closeBtn = document.getElementById("close-menu-btn");
-            const dropdownToggles = document.querySelectorAll(
-                ".mobile-dropdown-toggle"
-            );
-
-            function toggleMobileMenu() {
-                mobileMenu.classList.toggle("show");
-                document.body.classList.toggle("no-scroll");
-            }
-
-            openBtn.addEventListener("click", toggleMobileMenu);
-            closeBtn.addEventListener("click", toggleMobileMenu);
-
-            // Toggle untuk Mobile Dropdown
-            dropdownToggles.forEach((toggle) => {
-                toggle.addEventListener("click", () => {
-                    const targetId = `mobile-dropdown-${toggle.dataset.target}`;
-                    const targetMenu = document.getElementById(targetId);
-                    const chevron = toggle.querySelector(".dropdown-chevron");
-
-                    targetMenu.classList.toggle("open");
-                    chevron.classList.toggle("rotate-180");
-                });
-            });
-        })();
-    </script>
 </body>
 
 </html>

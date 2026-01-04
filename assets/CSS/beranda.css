@@ -703,7 +703,8 @@ footer a {
   }
 
   .footer-logo {
-    height: 40px;
+    width: 200px;
+    height: auto;
   }
 
   .footer-social {
