@@ -38,7 +38,7 @@
                     </button>
                 </div>
 
-                <!-- mobile -->
+                <!-- Baris Navigasi -->
                 <nav id="main-navigation"
                     class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-1 py-2">
                     <a href="../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>

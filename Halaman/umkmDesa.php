@@ -1,7 +1,8 @@
 <?php
-include "../database/dbConnect.php";
+// DATABASE CONNECTION
+require_once "../database/dbConnect.php";
+$conn = isset($konek) ? $konek : null;
 
-$conn = $konek;
 $produk_list = [];
 
 if ($conn) {
@@ -74,6 +75,7 @@ $wa_penjual = "6285333147733";
     </div>
 </div>
 
+<!-- logo -->
 
 <body class="bg-light">
     <header class="hero-background position-relative">
@@ -98,27 +100,35 @@ $wa_penjual = "6285333147733";
             </div>
 
             <!-- Baris Navigasi -->
-            <nav id="main-navigation" class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-1 py-1">
+            <nav id="main-navigation"
+                class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-1 py-2">
                 <a href="../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
                 <a href="../Halaman/pakettour.php" class="nav-link text-decoration-none px-3"><span class="nav-text">TOUR PACKAGES</span></a>
+
                 <!-- PETA INTERAKTIF -->
-                <div class="dropdown nav-dropdown">
-                    <a class="nav-link dropdown-toggle text-black text-decoration-none px-3" href="#" id="petaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="nav-text me-1">PETA INTERAKTIF</span>
+                <div class="dropdown">
+                    <a
+                        class="nav-link dropdown-toggle text-white text-decoration-none px-3"
+                        href="#"
+                        id="petaDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <span class="nav-text">PETA INTERAKTIF</span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="petaDropdown">
-                        <li><a class="dropdown-item" href="../Halaman/peta/petaDesa.php">Peta Desa (Umum)</a></li>
+                        <li>
+                            <a class="dropdown-item" href="../Halaman/peta/petaDesa.php">Peta Desa (UMUM)</a>
+                        </li>
                         <li><a class="dropdown-item" href="#">Peta UMKM</a></li>
                     </ul>
                 </div>
 
-                <!-- Objek wisata -->
                 <a href="../Halaman/wisata.php" class="nav-link text-black text-decoration-none px-3"><span class="nav-text">OBJEK WISATA</span></a>
-                <!-- umkm desa -->
-                <a href="../Halaman/umkmDesa.php" class="nav-link text-black active text-decoration-none px-3"><span class="nav-text">UMKM DESA</span></a>
+                <a href="../Halaman/umkmDesa.php" class="nav-link active text-black text-decoration-none px-3"><span class="nav-text">UMKM DESA</span></a>
             </nav>
         </div>
 
+        <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobile-menu">
             <div class="mobile-menu-header">
                 <h5 class="fw-bold mb-0">Menu Navigasi</h5>

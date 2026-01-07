@@ -1,13 +1,14 @@
 <?php
-require_once "../database/dbConnect.php";
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-if (!isset($konek)) {
-    die("Koneksi database tidak tersedia");
+include "../database/dbConnect.php";
+
+if (!isset($konek) || $konek->connect_errno) {
+    die("Koneksi database gagal.");
 }
 
-$conn = $konek;
-
-// HELPER FUNCTIONS
+// HELPER
 function formatDateIndo($dateStr)
 {
     if (empty($dateStr) || $dateStr === '0000-00-00') return '';
@@ -33,7 +34,6 @@ function formatDateIndo($dateStr)
     return date('j', $ts) . ' ' . $months[(int)date('n', $ts)] . ' ' . date('Y', $ts);
 }
 
-// DATA CARD
 $three_cards = [];
 
 $query = "SELECT judul, ringkasan, gambar, harga 
@@ -41,30 +41,33 @@ $query = "SELECT judul, ringkasan, gambar, harga
           ORDER BY id ASC 
           LIMIT 6";
 
-$result = $conn->query($query);
+$result = $konek->query($query);
 
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
+if (!$result) {
+    die("Query error: " . $konek->error);
+}
 
-        $image = !empty($row['gambar'])
-            ? "../uploads/berita/" . $row['gambar']
-            : "https://placehold.co/400x250/4a86e8/ffffff?text=No+Image";
+while ($row = $result->fetch_assoc()) {
 
-        $excerpt = !empty($row['ringkasan'])
-            ? (mb_strlen($row['ringkasan']) > 100
-                ? mb_substr($row['ringkasan'], 0, 100) . '...'
-                : $row['ringkasan'])
-            : 'No description available.';
+    $image = !empty($row['gambar'])
+        ? "../uploads/berita/" . $row['gambar']
+        : "https://placehold.co/400x250/4a86e8/ffffff?text=No+Image";
 
-        $three_cards[] = [
-            'title'   => htmlspecialchars($row['judul'] ?? 'Tanpa Judul'),
-            'excerpt' => htmlspecialchars($excerpt),
-            'image'   => $image,
-            'harga'   => (int)($row['harga'] ?? 0)
-        ];
-    }
+    $excerpt = !empty($row['ringkasan'])
+        ? (mb_strlen($row['ringkasan']) > 100
+            ? mb_substr($row['ringkasan'], 0, 100) . '...'
+            : $row['ringkasan'])
+        : 'No description available.';
+
+    $three_cards[] = [
+        'title'   => htmlspecialchars($row['judul'] ?? 'Tanpa Judul'),
+        'excerpt' => htmlspecialchars($excerpt),
+        'image'   => $image,
+        'harga'   => (int)($row['harga'] ?? 0)
+    ];
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -105,7 +108,7 @@ if ($result && $result->num_rows > 0) {
                 </button>
             </div>
 
-            <!-- mobile -->
+            <!-- Baris Navigasi -->
             <nav id="main-navigation"
                 class="d-none d-lg-flex justify-content-center text-black small fw-bold mt-1 py-2">
                 <a href="../Halaman/Beranda.php" class="nav-link text-decoration-none px-3"><span class="nav-text">BERANDA</span></a>
