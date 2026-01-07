@@ -39,9 +39,8 @@ $wa_penjual = "6285333147733";
     <script src="https://unpkg.com/lucide@latest" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../assets/CSS/umkm.css">
-    <script src="../assets/JS/mobileMenu.js" defer></script>
+    <script src="../assets/JS/umkmDesa.js" defer></script>
 </head>
-
 
 <!-- Modal WhatsApp -->
 <div class="modal fade" id="waModal" tabindex="-1" aria-labelledby="waModalLabel" aria-hidden="true">
